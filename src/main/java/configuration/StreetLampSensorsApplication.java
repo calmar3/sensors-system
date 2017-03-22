@@ -1,12 +1,13 @@
-package it.uniroma2.isssr.examples;
+package configuration;
+
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class IsssrSpringExampleApplication {
+public class StreetLampSensorsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(IsssrSpringExampleApplication.class, args);
+		SpringApplication.run(StreetLampSensorsApplication.class, args);
 	}
 }

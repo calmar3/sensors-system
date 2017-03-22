@@ -1,0 +1,17 @@
+/home/valerio/springexample/src/main/java/configuration/SampleMongoConfiguration.java
+/home/valerio/springexample/src/main/java/configuration/SensorsConfiguration.java
+/home/valerio/springexample/src/main/java/configuration/Addresses.java
+/home/valerio/springexample/src/main/java/mastrofini/MyEntityRepositoryImpl.java
+/home/valerio/springexample/src/main/java/rest/DTO.java
+/home/valerio/springexample/src/main/java/configuration/DBLogger.java
+/home/valerio/springexample/src/main/java/rest/StorageService.java
+/home/valerio/springexample/src/main/java/mastrofini/MyWebEndPoint.java
+/home/valerio/springexample/src/main/java/rest/StorageServiceImpl.java
+/home/valerio/springexample/src/main/java/mastrofini/MyEntityRepository.java
+/home/valerio/springexample/src/main/java/configuration/StreetLampSensorsApplication.java
+/home/valerio/springexample/src/main/java/rest/RestController.java
+/home/valerio/springexample/src/main/java/mastrofini/MyEntity.java
+/home/valerio/springexample/src/main/java/model/StreetLamp.java
+/home/valerio/springexample/src/main/java/rest/DTOLevel3Request.java
+/home/valerio/springexample/src/main/java/mastrofini/MyEntityRepositoryCustom.java
+/home/valerio/springexample/src/main/java/configuration/StreetLampThread.java
