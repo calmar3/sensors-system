@@ -1,8 +1,5 @@
 package model;
 
-
-import java.util.List;
-
 import org.json.simple.JSONObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

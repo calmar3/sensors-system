@@ -22,7 +22,8 @@ import repository.StreetLampRepository;
 
 @Configuration
 public class SensorsConfiguration {
-    
+    //TODO Fix "Failed to load ApplicationContext...." the problem is @Inject
+	//http://stackoverflow.com/questions/32580867/nosuchbeandefinitionexception-no-qualifying-bean-of-type-found?rq=1
 	@Inject
 	private StreetLampRepository streetLampRepository;
 	private ArrayList<Street> street;
@@ -37,7 +38,7 @@ public class SensorsConfiguration {
 	
 	public void readConfig() throws IOException{
 		
-		File file = new File("resources/Sensor");
+		File file = new File("resources/Sensors");
 		Scanner s = null;
 
 		s = new Scanner(file);

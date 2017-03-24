@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
+
+import com.mongodb.BasicDBObject;
 //import com.mongodb.BasicDBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
@@ -35,7 +37,7 @@ class SampleMongoConfiguration extends AbstractMongoConfiguration {
 	public MongoDbFactory mongoDbFactory() throws Exception {
 		
 		MongoClient mongoClient = null;
-		ServerAddress serverAddress = new ServerAddress(Addresses.host,Addresses.port);
+		ServerAddress serverAddress = new ServerAddress(Addresses.host, Addresses.port);
 		
 		
 		if(Addresses.user!=null){
@@ -51,7 +53,7 @@ class SampleMongoConfiguration extends AbstractMongoConfiguration {
 		// Mongo DB Factory
 		SimpleMongoDbFactory simpleMongoDbFactory = new SimpleMongoDbFactory(mongoClient, getDatabaseName());
 		
-		//simpleMongoDbFactory.getDb().getCollection("streetlamp").createIndex(new BasicDBObject("id", -1));
+		simpleMongoDbFactory.getDb().getCollection(getDatabaseName()).createIndex(new BasicDBObject("id", -1));
 		
 		return simpleMongoDbFactory;
 

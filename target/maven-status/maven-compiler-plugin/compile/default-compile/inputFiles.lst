@@ -5,11 +5,11 @@
 /home/valerio/workspace/StreetLampSensors/src/main/java/configuration/SampleMongoConfiguration.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/configuration/StreetLampSensorsApplication.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/kafka/StreetLigthSensorProducer.java
+/home/valerio/workspace/StreetLampSensors/src/main/java/configuration/ServletInitializer.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/repository/StreetLampRepository.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/configuration/Addresses.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/model/Street.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/configuration/MappingThreadsLamps.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/model/StreetLamp.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/rest/CRUDService.java
-/home/valerio/workspace/StreetLampSensors/src/main/java/rest/DTOCRUDRequest.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/rest/RestController.java
