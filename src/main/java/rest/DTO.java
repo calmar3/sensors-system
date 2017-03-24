@@ -11,31 +11,22 @@ public class DTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@JsonInclude(Include.NON_NULL)
+	private String data;
+	@JsonInclude(Include.NON_NULL)
 	protected String error;
 	
 	public DTO(){};
 	
-	public DTO(String error){
-		this.error=error;
+	public DTO( String data ) {
+		this.data = data;
 	}
 	
-	public String getError() {
-		return error;
-	}
-	public void setError(String error) {
-		this.error = error;
+	public String getData() {
+		return data;
 	}
 	
-	@JsonInclude(Include.NON_NULL)
-	protected String message;
-	
-	public String getMessage() {
-		return message;
+	public void setData(String data) {
+		this.data = data;
 	}
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	
-	
 	
 }

@@ -1,5 +1,12 @@
 package rest;
 
+import java.io.IOException;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import model.StreetLamp;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -9,16 +16,21 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import repository.StreetLampRepository;
 import configuration.Addresses;
+import configuration.MappingThreadsLamps;
+import configuration.StreetLampThread;
 
 @Service("LoginService")
 public class CRUDServiceImpl implements CRUDService{
 	
 	@Autowired
 	MongoTemplate mongoDb;
+	@Inject
+	private StreetLampRepository streetLampRepository;
 
 	@Override
-	public void insertStreetLamp(DTOCRUDRequest request) {
+	public void insertStreetLamp(DTO request) {
 		
 		JSONObject jo = null;
 		JSONParser parser = new JSONParser();
@@ -44,16 +56,36 @@ public class CRUDServiceImpl implements CRUDService{
 	
 		mongoDb.save(jo, Addresses.database);
 		
-		//createNewThread()
+		//create new thread
+		StreetLamp streetLamp = null;
+		streetLamp = streetLampRepository.findById(id);
+	
+		StreetLampThread sl = new StreetLampThread(streetLamp);					
+		MappingThreadsLamps.getInstance().put(streetLamp.getId(), sl);
+		
+		sl.start();
 	}
 	
-	public void updateStreetLamp(DTOCRUDRequest request) {
+	public void updateStreetLamp(DTO request) {
 		
-		//notify thread
+		JSONObject jo = null;
+		JSONParser parser = new JSONParser();
 		
+		try {
+			jo = (JSONObject) parser.parse(request.getData());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		String id = jo.get("id").toString();
+		String intensityAdjustment = jo.get("intensityAdjustment").toString();
+		
+		//update thread ligthIntensityAdjustment
+		StreetLampThread t = (StreetLampThread) MappingThreadsLamps.getInstance().get(id);
+		t.setLigthIntensityAdjustment(Double.parseDouble(intensityAdjustment));
 	}
 	
-	public void deleteStreetLamp(DTOCRUDRequest request) {
+	public void deleteStreetLamp(DTO request) {
 
 		JSONObject jo = null;
 		JSONParser parser = new JSONParser();
@@ -73,6 +105,8 @@ public class CRUDServiceImpl implements CRUDService{
 		mongoDb.remove(query, "dbname");
 		
 		//stopThread()
+		StreetLampThread t = (StreetLampThread) MappingThreadsLamps.getInstance().get(id);
+		t.setStop(true);
 			
 	}
 	

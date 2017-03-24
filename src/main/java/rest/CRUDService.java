@@ -2,8 +2,8 @@ package rest;
 
 public interface CRUDService {
 	
-	public void insertStreetLamp(DTOCRUDRequest request);
-	public void updateStreetLamp(DTOCRUDRequest request);
-	public void deleteStreetLamp(DTOCRUDRequest request);
+	public void insertStreetLamp(DTO request);
+	public void updateStreetLamp(DTO request);
+	public void deleteStreetLamp(DTO request);
 
 }

@@ -14,21 +14,21 @@ public class RestController {
 	CRUDService crudService;
 	
 	@RequestMapping(value = "/insertNewStreetLamp/", method = RequestMethod.POST)
-	public void insert(@RequestBody DTOCRUDRequest request) {
+	public void insert(@RequestBody DTO request) {
 		
 		crudService.insertStreetLamp(request);
 	
 	}
 	
 	@RequestMapping(value = "/updateStreetLamp/", method = RequestMethod.POST) 
-	public void update(@RequestBody DTOCRUDRequest request){
+	public void update(@RequestBody DTO request){
 	
 		crudService.updateStreetLamp(request);
 	
 	}
 	
 	@RequestMapping(value = "/deleteStreetLamp/", method = RequestMethod.POST) 
-	public void delete(@RequestBody DTOCRUDRequest request){
+	public void delete(@RequestBody DTO request){
 		
 		crudService.deleteStreetLamp(request);
 	

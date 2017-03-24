@@ -5,16 +5,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import kafka.StreetLigthSensorProducer;
+import model.StreetLamp;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
-import model.StreetLamp;
 
 public class StreetLampThread extends Thread {
 	
 	private StreetLamp streetLamp;
 	private double ligthIntensityAdjustment = 1;
+	private boolean stop = false;
 	private long sleepTime = 10;
 	
 	
@@ -28,12 +27,20 @@ public class StreetLampThread extends Thread {
 
 	public void setLigthIntensityAdjustment(double ligthIntensityAdjustment) {
 		this.ligthIntensityAdjustment = ligthIntensityAdjustment;
-	}	
+	}
+	
+	public boolean isStop() {
+		return stop;
+	}
+
+	public void setStop(boolean stop) {
+		this.stop = stop;
+	}
 	
 	@Override
 	public void run() {
 		
-		while(true) {
+		while(!stop) {
 			try {
 				Date date1 = new SimpleDateFormat("HH:mm").parse("24:00");
 				Date date2 = new SimpleDateFormat("HH:mm").parse("06:00");
@@ -106,5 +113,9 @@ public class StreetLampThread extends Thread {
 					Thread.currentThread().interrupt();
 			}	
 		}
+		
+		if(stop)
+			Thread.currentThread().interrupt();
 	}
+
 }
