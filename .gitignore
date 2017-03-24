@@ -106,3 +106,4 @@ local.properties
 
 .DS_Store
 
+/target/

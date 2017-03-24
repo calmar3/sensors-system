@@ -18,6 +18,7 @@ public class StreetLamp{
 	private String powerConsumption;	
 	private String state;
 	private String lastSubstitutionDate;
+	private Street street;
 	
 	public StreetLamp(){}
 	
@@ -87,6 +88,14 @@ public class StreetLamp{
 		this.lastSubstitutionDate = lastSubstitutionDate;
 	}
 	
+	public Street getStreet() {
+		return street;
+	}
+
+	public void setStreet(Street street) {
+		this.street = street;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static JSONObject toJSONObject(StreetLamp l) throws IllegalArgumentException, IllegalAccessException {
 		
@@ -102,13 +111,5 @@ public class StreetLamp{
 		
 		return jo;
 	}
-	
-	@SuppressWarnings("static-access")
-	public static String listToJSONOBjectList(List<StreetLamp> logList) throws IllegalArgumentException, IllegalAccessException {
-		String s="{[";
-		for(StreetLamp l : logList) 
-			s += l.toJSONObject(l).toString();		
-		return s+"]}";
-	}
-	
+
 }
