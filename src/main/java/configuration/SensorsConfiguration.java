@@ -25,17 +25,17 @@ public class SensorsConfiguration {
 
 	@Inject
 	StreetLampRepository streetLampRepository;
-	private ArrayList<Street> street;
+	private ArrayList<Street> streetList;
 
-	public ArrayList<Street> getStreet() {
-		return street;
+	public ArrayList<Street> getStreetList() {
+		return streetList;
 	}
 
-	public void setStreet(ArrayList<Street> street) {
-		this.street = street;
+	public void setStreetList(ArrayList<Street> streetList) {
+		this.streetList = streetList;
 	}
 	
-	public void readConfig() throws IOException{
+	public List<Street> readConfig() throws IOException{
 		
 		File file = new File("resources/Sensors");
 		Scanner s = null;
@@ -84,39 +84,40 @@ public class SensorsConfiguration {
 	        list.add(st);
 		}
 		s.close();	
-		this.setStreet(list);		
+		this.setStreetList(list);
+		
+		return this.streetList;
 	}
 	
 	public void ConfigLamp() throws IOException, ParseException{
 
 		streetLampRepository.deleteAll();
+		List<Street> streetList = null;
 		
-		readConfig();
-    	int i = getStreet().size()-1;
-    	int cont=1;
-    	while(i>0){
+		streetList = readConfig();
+		
+    	int id = 1;
+    	for(Street street : streetList){
     		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
     		String tmp = dateFormat.format(new Date());
-    		Date timeStamp = null;
-    		timeStamp = dateFormat.parse(tmp);
+    		Date timeStamp = dateFormat.parse(tmp);
     		
-    		int j=Integer.parseInt(getStreet().get(i).getNumLamp());
+    		int j = Integer.parseInt(street.getNumLamp());
     		while(j>0){    		
 	    		StreetLamp lp = new StreetLamp();
-	    		lp.setBulbModel(getStreet().get(i).getModel());
-	    		lp.setId(""+cont+"");
+	    		lp.setBulbModel(street.getModel());
+	    		lp.setId(""+id+"");
 	    		lp.setLigthIntensity("0");
-	    		lp.setPosition(getStreet().get(i).getAddress()+" "+j+"");
+	    		lp.setPosition(street.getAddress()+", "+j+"");
 	    		lp.setPowerConsumption("0");
 	    		lp.setState("OFF");
 	    		lp.setlastSubstitutionDate(""+timeStamp+"");
-	    		lp.setStreet(getStreet().get(i));
+	    		lp.setStreet(street);
 	    		streetLampRepository.save(lp);
 	    		
-	    		cont=cont+1;
-	    		j=j-1;
+	    		id++;
+	    		j--;
     		}
-            i=i-1;
     	}
     	
 	}

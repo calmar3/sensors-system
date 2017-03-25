@@ -15,6 +15,7 @@ public class StreetLamp{
 	private String powerConsumption;	
 	private String state;
 	private String lastSubstitutionDate;
+	
 	private Street street;
 	
 	public StreetLamp(){}

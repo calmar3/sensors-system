@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 public class StreetLampThread extends Thread {
 	
 	private StreetLamp streetLamp;
+	private StreetLigthSensorProducer producer;
 	private double ligthIntensityAdjustment = 1;
 	private boolean stop = false;
 	private long sleepTime = 10;
@@ -39,6 +40,9 @@ public class StreetLampThread extends Thread {
 	
 	@Override
 	public void run() {
+		
+		producer = new StreetLigthSensorProducer();
+	    producer.initialize();
 		
 		while(!stop) {
 			try {
@@ -87,35 +91,35 @@ public class StreetLampThread extends Thread {
 			} catch (ParseException e1) {
 				e1.printStackTrace();
 			}			
-	        if(this.streetLamp.getState().equals("ON")){
+	        if(this.streetLamp.getState().equals("ON")){//publish tuple on kafka topic
 	    		JSONObject jo = null;
 	        	try {
 					jo = StreetLamp.toJSONObject(this.streetLamp);
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					e.printStackTrace();
 				} 
-	            
-	        	//creare oggetto jeson e inviarlo con kafka 
-	            
-	            StreetLigthSensorProducer producer = new StreetLigthSensorProducer();
-	            // Initialize the producer with required properties
-	            producer.initialize();           
-	            // Publish message to brokers
-	            producer.publish(this.streetLamp.getId(), jo.toString());//
-	            // Close the connection between broker and producer
-	            producer.closeProducer();
 	        	
+	        	Date date = new Date();
+	        	jo.put("timestamp", date.getTime()); //add timestamp UTC 1/1/1970 epoch
+	        	
+	            System.out.println(jo+"\n\n\n\n");
+	            Thread.currentThread().interrupt();
+	            producer.publish(this.streetLamp.getId(), jo.toString()); //Publish message to brokers
 	        }
 			try {	
-				Thread.sleep(sleepTime*1000);
+				Thread.sleep(sleepTime*10000);
 			}
-			catch(InterruptedException e) { //Eccezione sollevata nel caso il thread venga interrotto
-					Thread.currentThread().interrupt();
+			catch(InterruptedException e) {
+				producer.closeProducer();
+				Thread.currentThread().interrupt();
 			}	
 		}
 		
-		if(stop)
-			Thread.currentThread().interrupt();
+		if(stop){
+            // Close the connection between broker and producer
+            producer.closeProducer();
+            Thread.currentThread().interrupt();
+		}
 	}
 
 }
