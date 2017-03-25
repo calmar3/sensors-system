@@ -7,25 +7,24 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import model.Street;
 import model.StreetLamp;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-import repository.StreetLampRepository;
-
-@Configuration
+@Component
 public class SensorsConfiguration {
-    //TODO Fix "Failed to load ApplicationContext...." the problem is @Inject
-	//http://stackoverflow.com/questions/32580867/nosuchbeandefinitionexception-no-qualifying-bean-of-type-found?rq=1
+
 	@Inject
-	private StreetLampRepository streetLampRepository;
+	StreetLampRepository streetLampRepository;
 	private ArrayList<Street> street;
 
 	public ArrayList<Street> getStreet() {
@@ -90,6 +89,8 @@ public class SensorsConfiguration {
 	
 	public void ConfigLamp() throws IOException, ParseException{
 
+		streetLampRepository.deleteAll();
+		
 		readConfig();
     	int i = getStreet().size()-1;
     	int cont=1;
@@ -101,7 +102,7 @@ public class SensorsConfiguration {
     		
     		int j=Integer.parseInt(getStreet().get(i).getNumLamp());
     		while(j>0){    		
-	    		StreetLamp lp = new StreetLamp(); //si salva cosi?
+	    		StreetLamp lp = new StreetLamp();
 	    		lp.setBulbModel(getStreet().get(i).getModel());
 	    		lp.setId(""+cont+"");
 	    		lp.setLigthIntensity("0");
@@ -110,7 +111,8 @@ public class SensorsConfiguration {
 	    		lp.setState("OFF");
 	    		lp.setlastSubstitutionDate(""+timeStamp+"");
 	    		lp.setStreet(getStreet().get(i));
-
+	    		streetLampRepository.save(lp);
+	    		
 	    		cont=cont+1;
 	    		j=j-1;
     		}
@@ -119,7 +121,7 @@ public class SensorsConfiguration {
     	
 	}
 	
-	@Bean
+	@PostConstruct
 	public void initThreadList() {
 		
 		try {
@@ -127,7 +129,6 @@ public class SensorsConfiguration {
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
 		}
-		
 		List<StreetLamp> streetLampList = null;
 		streetLampList = streetLampRepository.findAll();
 		
@@ -136,6 +137,17 @@ public class SensorsConfiguration {
 			MappingThreadsLamps.getInstance().put(lamp.getId(), sl);
 			
 			sl.start();
+		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	@PreDestroy
+	public void destroyThreadList() {
+	
+		HashMap<String, Object> tmp = MappingThreadsLamps.getInstance();
+		for (Object value : tmp.values()){
+			Thread t = (Thread) value;
+			t.stop();
 		}
 	}
 	

@@ -3,10 +3,9 @@
 /home/valerio/workspace/StreetLampSensors/src/main/java/configuration/StreetLampThread.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/rest/CRUDServiceImpl.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/configuration/SampleMongoConfiguration.java
+/home/valerio/workspace/StreetLampSensors/src/main/java/configuration/StreetLampRepository.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/configuration/StreetLampSensorsApplication.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/kafka/StreetLigthSensorProducer.java
-/home/valerio/workspace/StreetLampSensors/src/main/java/configuration/ServletInitializer.java
-/home/valerio/workspace/StreetLampSensors/src/main/java/repository/StreetLampRepository.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/configuration/Addresses.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/model/Street.java
 /home/valerio/workspace/StreetLampSensors/src/main/java/configuration/MappingThreadsLamps.java

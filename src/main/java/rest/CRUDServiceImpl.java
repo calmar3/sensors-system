@@ -13,9 +13,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import repository.StreetLampRepository;
 import configuration.Addresses;
 import configuration.MappingThreadsLamps;
+import configuration.StreetLampRepository;
 import configuration.StreetLampThread;
 
 @Service("LoginService")
@@ -24,7 +24,7 @@ public class CRUDServiceImpl implements CRUDService{
 	@Autowired
 	MongoTemplate mongoDb;
 	@Inject
-	private StreetLampRepository streetLampRepository;
+	StreetLampRepository streetLampRepository;
 
 	@Override
 	public void insertStreetLamp(DTO request) {

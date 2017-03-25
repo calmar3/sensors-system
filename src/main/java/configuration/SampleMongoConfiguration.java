@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
-
 import com.mongodb.BasicDBObject;
 //import com.mongodb.BasicDBObject;
 import com.mongodb.Mongo;
@@ -59,6 +58,7 @@ class SampleMongoConfiguration extends AbstractMongoConfiguration {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Bean
 	public MongoTemplate mongoTemplate() throws Exception {
 		MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory());
