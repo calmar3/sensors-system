@@ -106,7 +106,7 @@ public class SensorsConfiguration {
     		while(j>0){    		
 	    		StreetLamp lp = new StreetLamp();
 	    		lp.setBulbModel(street.getModel());
-	    		lp.setId(""+id+"");
+	    		lp.setId(""+Integer.toString(id)+"");
 	    		lp.setLigthIntensity("0");
 	    		lp.setPosition(street.getAddress()+", "+j+"");
 	    		lp.setPowerConsumption("0");
@@ -134,10 +134,10 @@ public class SensorsConfiguration {
 		streetLampList = streetLampRepository.findAll();
 		
 		for (StreetLamp lamp : streetLampList){
-			StreetLampThread sl = new StreetLampThread(lamp);					
-			MappingThreadsLamps.getInstance().put(lamp.getId(), sl);
+			StreetLampThread t = new StreetLampThread(lamp);					
+			MappingThreadsLamps.getInstance().put(lamp.getId(), t);
 			
-			sl.start();
+			t.start();
 		}
 	}
 	
@@ -145,7 +145,7 @@ public class SensorsConfiguration {
 	@PreDestroy
 	public void destroyThreadList() {
 	
-		HashMap<String, Object> tmp = MappingThreadsLamps.getInstance();
+		HashMap<String, StreetLampThread> tmp = MappingThreadsLamps.getInstance();
 		for (Object value : tmp.values()){
 			Thread t = (Thread) value;
 			t.stop();

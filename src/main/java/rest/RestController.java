@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import org.json.simple.JSONObject;
+
 @Controller
 @RequestMapping("/")
 public class RestController {
@@ -15,21 +17,21 @@ public class RestController {
 	CRUDService crudService;
 	
 	@RequestMapping(value = "/insertNewStreetLamp/", method = RequestMethod.POST)
-	public ResponseEntity<DTO> insert(@RequestBody DTO request) {
+	public ResponseEntity<JSONObject> insert(@RequestBody DTO request) {
 
 		return crudService.insertStreetLamp(request);
 	
 	}
 	
 	@RequestMapping(value = "/deleteStreetLamp/", method = RequestMethod.POST) 
-	public ResponseEntity<DTO> delete(@RequestBody DTO request){
+	public ResponseEntity<JSONObject> delete(@RequestBody DTO request){
 		
 		return crudService.deleteStreetLamp(request);
 	
 	}
 	
-	@RequestMapping(value = "/AdjustStreetLampLigthIntensity/", method = RequestMethod.POST) 
-	public ResponseEntity<DTO> update(@RequestBody DTO request){
+	@RequestMapping(value = "/adjustStreetLampLigthIntensity/", method = RequestMethod.POST) 
+	public ResponseEntity<JSONObject> update(@RequestBody DTO request){
 	
 		return crudService.updateStreetLamp(request);
 	

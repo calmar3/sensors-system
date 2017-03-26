@@ -4,16 +4,16 @@ import java.util.HashMap;
 
 public class MappingThreadsLamps {
 	
-	private static HashMap<String, Object> tlmap = null;
+	private static HashMap<String, StreetLampThread> instance = null;
 	
 	protected MappingThreadsLamps(){}
 	
-	public static HashMap<String, Object> getInstance(){
+	public synchronized static final HashMap<String, StreetLampThread> getInstance(){
 		
-		if(tlmap == null)
-			return new HashMap<String, Object>();
+		if(instance == null)
+			instance = new HashMap<String, StreetLampThread>();
 		
-		return tlmap;
+		return instance;
 	}
 	
 }

@@ -13,5 +13,6 @@ public interface StreetLampRepository extends MongoRepository<StreetLamp, String
 	@SuppressWarnings("unchecked")
 	public StreetLamp save(StreetLamp streetLamp);
 	public void deleteAll();
+	public void delete(String id);
 
 }

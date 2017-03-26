@@ -11,22 +11,88 @@ public class DTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@JsonInclude(Include.NON_NULL)
-	private String data;
-	@JsonInclude(Include.NON_NULL)
-	protected String error;
+	private String id;
+	private String position;
+	private String ligthIntensity;
+	private String bulbModel;
+	private String powerConsumption;
+	private String state;
+	private String lastSubstitutionDate;
+	private String intensityAdjustment;
 	
 	public DTO(){};
 	
-	public DTO( String data ) {
-		this.data = data;
+	/*public DTO( String id, String position, String ligthIntensity, String bulbModel, String powerConsumption, String state, String lastSubstitutionDate ) {
+		this.setId(id);
+		this.setPosition(position);
+		this.setLigthIntensity(ligthIntensity);
+		this.setBulbModel(bulbModel);
+		this.setPowerConsumption(powerConsumption);
+		this.setState(state);
+		this.setLastSubstitutionDate(lastSubstitutionDate);
+	}*/
+
+	public String getId() {
+		return id;
 	}
-	
-	public String getData() {
-		return data;
+
+	public void setId(String id) {
+		this.id = id;
 	}
-	
-	public void setData(String data) {
-		this.data = data;
+
+	public String getPosition() {
+		return position;
 	}
-	
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public String getLigthIntensity() {
+		return ligthIntensity;
+	}
+
+	public void setLigthIntensity(String ligthIntensity) {
+		this.ligthIntensity = ligthIntensity;
+	}
+
+	public String getBulbModel() {
+		return bulbModel;
+	}
+
+	public void setBulbModel(String bulbModel) {
+		this.bulbModel = bulbModel;
+	}
+
+	public String getPowerConsumption() {
+		return powerConsumption;
+	}
+
+	public void setPowerConsumption(String powerConsumption) {
+		this.powerConsumption = powerConsumption;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getLastSubstitutionDate() {
+		return lastSubstitutionDate;
+	}
+
+	public void setLastSubstitutionDate(String lastSubstitutionDate) {
+		this.lastSubstitutionDate = lastSubstitutionDate;
+	}
+
+	public String getIntensityAdjustment() {
+		return intensityAdjustment;
+	}
+
+	public void setIntensityAdjustment(String intensityAdjustment) {
+		this.intensityAdjustment = intensityAdjustment;
+	}
 }
