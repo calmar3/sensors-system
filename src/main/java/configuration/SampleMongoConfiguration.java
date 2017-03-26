@@ -23,7 +23,7 @@ class SampleMongoConfiguration extends AbstractMongoConfiguration {
 	
 	@Override
 	protected String getDatabaseName() {
-		return Addresses.database;
+		return MongoCredentials.database;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -36,12 +36,12 @@ class SampleMongoConfiguration extends AbstractMongoConfiguration {
 	public MongoDbFactory mongoDbFactory() throws Exception {
 		
 		MongoClient mongoClient = null;
-		ServerAddress serverAddress = new ServerAddress(Addresses.host, Addresses.port);
+		ServerAddress serverAddress = new ServerAddress(MongoCredentials.host, MongoCredentials.port);
 		
 		
-		if(Addresses.user!=null){
+		if(MongoCredentials.user!=null){
 			// Set credentials
-			MongoCredential credential = MongoCredential.createCredential(Addresses.user, getDatabaseName(), Addresses.password.toCharArray());
+			MongoCredential credential = MongoCredential.createCredential(MongoCredentials.user, getDatabaseName(), MongoCredentials.password.toCharArray());
 	
 			// Mongo Client
 			mongoClient = new MongoClient(serverAddress, Arrays.asList(credential));

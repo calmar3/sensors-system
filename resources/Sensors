@@ -1,8 +1,8 @@
 num_lamp:1 address:via_di_centocelle model:Stud consumption:500 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50
 num_lamp:1 address:via_calpurnio_fiamma model:10PCS consumption:509 consumption:508 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50
-num_lamp:1 address:via_vestricio_spurinna model:10PCS consumption:85 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50
-num_lamp:1 address:via_dei_salesiani model:10PCS consumption:500 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50
-num_lamp:1 address:via_flavio_stilicone model:Stud consumption:500 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50
-num_lamp:1 address:via_papiria model:10PCS consumption:507 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50
-num_lamp:1 address:via_tor_de_schiavi model:Stud consumption:502 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50
-num_lamp:1 address:via_delle_palme model:10PCS consumption:500 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50
+num_lamp:0 address:via_vestricio_spurinna model:10PCS consumption:85 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50
+num_lamp:0 address:via_dei_salesiani model:10PCS consumption:500 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50
+num_lamp:0 address:via_flavio_stilicone model:Stud consumption:500 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50
+num_lamp:0 address:via_papiria model:10PCS consumption:507 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50
+num_lamp:0 address:via_tor_de_schiavi model:Stud consumption:502 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50
+num_lamp:0 address:via_delle_palme model:10PCS consumption:500 intensity_mrn:0 intensity_aft:5 intensity_evng:10 intensity_nght:50

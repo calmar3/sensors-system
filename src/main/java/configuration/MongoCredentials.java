@@ -1,8 +1,7 @@
 package configuration;
 
-public class Addresses {
+public class MongoCredentials {
 
-	//Indirizzo del DB
 	public final static String user = "user";
 	public final static String password = "password";
 	public final static String database = "streetlampsensors";

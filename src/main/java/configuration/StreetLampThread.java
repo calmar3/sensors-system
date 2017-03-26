@@ -41,8 +41,8 @@ public class StreetLampThread extends Thread {
 	@Override
 	public void run() {
 		
-		producer = new StreetLigthSensorProducer();
-	    producer.initialize();
+		//producer = new StreetLigthSensorProducer();
+	    //producer.initialize();
 		
 		while(!stop) {
 			try {
@@ -101,10 +101,8 @@ public class StreetLampThread extends Thread {
 	        	
 	        	Date date = new Date();
 	        	jo.put("timestamp", date.getTime()); //add timestamp UTC 1/1/1970 epoch
-	        	
-	            System.out.println(jo+"\n\n\n\n");
-	            Thread.currentThread().interrupt();
-	            producer.publish(this.streetLamp.getId(), jo.toString()); //Publish message to brokers
+
+	        	//producer.publish(this.streetLamp.getId(), jo.toString()); //Publish message to brokers
 	        }
 			try {	
 				Thread.sleep(sleepTime*10000);

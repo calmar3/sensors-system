@@ -11,14 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import configuration.Addresses;
+import configuration.MongoCredentials;
 import configuration.MappingThreadsLamps;
 import configuration.StreetLampRepository;
 import configuration.StreetLampThread;
 
-@Service("LoginService")
+@Service("CRUDService")
 public class CRUDServiceImpl implements CRUDService{
 	
 	@Autowired
@@ -27,7 +29,7 @@ public class CRUDServiceImpl implements CRUDService{
 	StreetLampRepository streetLampRepository;
 
 	@Override
-	public void insertStreetLamp(DTO request) {
+	public ResponseEntity<DTO> insertStreetLamp(DTO request) {
 		
 		JSONObject jo = null;
 		JSONParser parser = new JSONParser();
@@ -45,13 +47,13 @@ public class CRUDServiceImpl implements CRUDService{
 		String powerConsumption = jo.get("powerConsumption").toString();
 		String state = jo.get("state").toString();
 		String lastSubstitutionDate = jo.get("lastSubstitutionDate").toString();
-		
+
 		Query query = new Query();
 		query.addCriteria(Criteria.where("id").is(id).and("position").is(position).and("ligthIntensity").is(ligthIntensity)
 													 .and("bulbMode").is(bulbMode).and("powerConsumption").is(powerConsumption)
 													 .and("state").is(state).and("lastSubstitutionDate").is(lastSubstitutionDate));
 	
-		mongoDb.save(jo, Addresses.database);
+		mongoDb.save(jo, MongoCredentials.database);
 		
 		//create new thread
 		StreetLamp streetLamp = null;
@@ -61,28 +63,15 @@ public class CRUDServiceImpl implements CRUDService{
 		MappingThreadsLamps.getInstance().put(streetLamp.getId(), sl);
 		
 		sl.start();
+		
+		JSONObject jo_res = new JSONObject();
+		jo_res.put("responseCode", "InsertOK");
+		request.setData(jo_res.toString());
+		ResponseEntity<DTO> response = new ResponseEntity<DTO>(request, HttpStatus.OK);
+		return response;
 	}
 	
-	public void updateStreetLamp(DTO request) {
-		
-		JSONObject jo = null;
-		JSONParser parser = new JSONParser();
-		
-		try {
-			jo = (JSONObject) parser.parse(request.getData());
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
-		String id = jo.get("id").toString();
-		String intensityAdjustment = jo.get("intensityAdjustment").toString();
-		
-		//update thread ligthIntensityAdjustment
-		StreetLampThread t = (StreetLampThread) MappingThreadsLamps.getInstance().get(id);
-		t.setLigthIntensityAdjustment(Double.parseDouble(intensityAdjustment));
-	}
-	
-	public void deleteStreetLamp(DTO request) {
+	public ResponseEntity<DTO> deleteStreetLamp(DTO request) {
 
 		JSONObject jo = null;
 		JSONParser parser = new JSONParser();
@@ -104,7 +93,38 @@ public class CRUDServiceImpl implements CRUDService{
 		//stopThread()
 		StreetLampThread t = (StreetLampThread) MappingThreadsLamps.getInstance().get(id);
 		t.setStop(true);
+		
+		JSONObject jo_res = new JSONObject();
+		jo_res.put("responseCode", "DeleteOK");
+		request.setData(jo_res.toString());
+		ResponseEntity<DTO> response = new ResponseEntity<DTO>(request, HttpStatus.OK);
+		return response;
 			
+	}
+	
+	public ResponseEntity<DTO> updateStreetLamp(DTO request) {
+		
+		JSONObject jo = null;
+		JSONParser parser = new JSONParser();
+		
+		try {
+			jo = (JSONObject) parser.parse(request.getData());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		String id = jo.get("id").toString();
+		String intensityAdjustment = jo.get("intensityAdjustment").toString();
+		
+		//update thread ligthIntensityAdjustment
+		StreetLampThread t = (StreetLampThread) MappingThreadsLamps.getInstance().get(id);
+		t.setLigthIntensityAdjustment(Double.parseDouble(intensityAdjustment));
+		
+		JSONObject jo_res = new JSONObject();
+		jo_res.put("responseCode", "UpdateOK");
+		request.setData(jo_res.toString());
+		ResponseEntity<DTO> response = new ResponseEntity<DTO>(request, HttpStatus.OK);
+		return response;
 	}
 	
 }
