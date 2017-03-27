@@ -20,7 +20,9 @@ public class StreetLamp{
 	
 	public StreetLamp(){}
 	
-	public StreetLamp(String id, String position, String ligthIntensity, String bulbModel, String powerConsumption, String state, String lastSubstitutionDate){
+	public StreetLamp(String id, String position, String ligthIntensity, 
+			  String bulbModel, String powerConsumption, String state, 
+			  String lastSubstitutionDate){
 		this.id = id;
 		this.position = position;
 		this.ligthIntensity = ligthIntensity;
@@ -28,6 +30,19 @@ public class StreetLamp{
 		this.powerConsumption = powerConsumption;
 		this.state = state;
 		this.lastSubstitutionDate = lastSubstitutionDate;
+		}
+	
+	public StreetLamp(String id, String position, String ligthIntensity, 
+					  String bulbModel, String powerConsumption, String state, 
+					  String lastSubstitutionDate, Street street){
+		this.id = id;
+		this.position = position;
+		this.ligthIntensity = ligthIntensity;
+		this.bulbModel= bulbModel;
+		this.powerConsumption = powerConsumption;
+		this.state = state;
+		this.lastSubstitutionDate = lastSubstitutionDate;
+		this.street = street;
 	}
 
 	public String getId() {

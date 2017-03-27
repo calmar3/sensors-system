@@ -1,12 +1,10 @@
 package rest;
 
-import javax.inject.Inject;
-
+import model.Street;
 import model.StreetLamp;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,10 +15,8 @@ import configuration.StreetLampThread;
 
 @Service("CRUDService")
 public class CRUDServiceImpl implements CRUDService{
-	
+
 	@Autowired
-	MongoTemplate mongoDb;
-	@Inject
 	StreetLampRepository streetLampRepository;
 
 	@Override
@@ -34,10 +30,13 @@ public class CRUDServiceImpl implements CRUDService{
 		String state = request.getState();
 		String lastSubstitutionDate = request.getLastSubstitutionDate();
 
-		StreetLamp streetLamp = new StreetLamp(id, position, ligthIntensity, bulbModel, powerConsumption, 
-											   state, lastSubstitutionDate);
+		//temp fix
+		Street street = new Street("1", "via di centocelle", "Stud", "500", "0", "5", "10", "50");
 		
-		streetLamp = streetLampRepository.save(streetLamp);
+		StreetLamp streetLamp = new StreetLamp(id, position, ligthIntensity, bulbModel, powerConsumption, 
+											   state, lastSubstitutionDate , street);
+		
+		streetLampRepository.save(streetLamp);
 		
 		//create new thread
 		StreetLampThread t = new StreetLampThread(streetLamp);					

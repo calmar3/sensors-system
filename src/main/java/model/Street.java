@@ -22,6 +22,18 @@ public class Street {
 		this.intensityEvng = null;
 		this.intensityNght = null;	
 	}
+	
+	public Street(String numLamp, String address, String model, String consumption, 
+			      String intensityMrn, String intensityAft, String intensityEvng,  String intensityNght){
+		this.numLamp = numLamp;
+		this.address = address;
+		this.model = model;
+		this.consumption = consumption;
+		this.intensityMrn = intensityMrn;
+		this.intensityAft = intensityAft;
+		this.intensityEvng = intensityEvng;
+		this.intensityNght = intensityNght;	
+	}
 
 	public String getNumLamp() {
 		return numLamp;

@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import kafka.StreetLigthSensorProducer;
+//import kafka.StreetLigthSensorProducer;
 import model.StreetLamp;
 
 import org.json.simple.JSONObject;
@@ -12,7 +12,7 @@ import org.json.simple.JSONObject;
 public class StreetLampThread extends Thread {
 	
 	private StreetLamp streetLamp;
-	private StreetLigthSensorProducer producer;
+	//private StreetLigthSensorProducer producer;
 	private double ligthIntensityAdjustment = 1;
 	private boolean stop = false;
 	private long sleepTime = 10;
@@ -108,15 +108,16 @@ public class StreetLampThread extends Thread {
 				Thread.sleep(sleepTime*10000);
 			}
 			catch(InterruptedException e) {
-				producer.closeProducer();
+				//producer.closeProducer();
 				Thread.currentThread().interrupt();
 			}	
 		}
 		
 		if(stop){
             // Close the connection between broker and producer
-            producer.closeProducer();
-            Thread.currentThread().interrupt();
+            //producer.closeProducer();
+
+			Thread.currentThread().interrupt();
 		}
 	}
 

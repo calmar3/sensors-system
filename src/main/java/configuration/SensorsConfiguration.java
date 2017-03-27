@@ -13,17 +13,17 @@ import java.util.Scanner;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Inject;
 
 import model.Street;
 import model.StreetLamp;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SensorsConfiguration {
 
-	@Inject
+	@Autowired
 	StreetLampRepository streetLampRepository;
 	private ArrayList<Street> streetList;
 
@@ -38,50 +38,45 @@ public class SensorsConfiguration {
 	public List<Street> readConfig() throws IOException{
 		
 		File file = new File("resources/Sensors");
-		Scanner s = null;
+		Scanner s = new Scanner(file);
 
-		s = new Scanner(file);
-		
 		ArrayList<Street> list = new ArrayList<Street>();
 		while (s.hasNext()){
-			Street st = new Street();
+			Street street = new Street();
 			String [] line = s.nextLine().split("\\s+");
 		    
-			if(line[0].equals("")){
-		    	continue;
-		    }
 		    if(line[0].startsWith("num_lamp:")){
-        		st.setNumLamp(line[0].substring(9));
+		    	street.setNumLamp(line[0].substring(9));
         	}else{
         		s.close();
-		    	throw new InvalidObjectException(line[0]);
+		    	throw new InvalidObjectException("Invalid configuration file!");
         	}
 	        for(String i:line){
 	        	if(i == line[0])
 	        		continue;
 	        	else if(i.startsWith("address:")){
-	        		st.setAddress(i.substring(8).replace("_", " "));
+	        		street.setAddress(i.substring(8).replace("_", " "));
 	        	}
 	        	else if(i.startsWith("model:")){
-	        		st.setModel(i.substring(6));
+	        		street.setModel(i.substring(6));
 	        	}
 	        	else if(i.startsWith("consumption:")){
-	        		st.setConsumption(i.substring(12));
+	        		street.setConsumption(i.substring(12));
 	        	}
 	        	else if(i.startsWith("intensity_mrn:")){
-	        		st.setIntensityMrn(i.substring(15));
+	        		street.setIntensityMrn(i.substring(14));
 	        	}
 	        	else if(i.startsWith("intensity_aft:")){ 
-	        		st.setIntensityAft(i.substring(14));		
+	        		street.setIntensityAft(i.substring(14));		
 	        	}
 			    else if(i.startsWith("intensity_evng:")){
-			    	st.setIntensityEvng(i.substring(15));
+			    	street.setIntensityEvng(i.substring(15));
 	        	}
 			    else if(i.startsWith("intensity_nght:")){
-			    	st.setIntensityEvng(i.substring(15));
+			    	street.setIntensityNght(i.substring(15));
 	        	}
 	        }
-	        list.add(st);
+	        list.add(street);
 		}
 		s.close();	
 		this.setStreetList(list);
@@ -141,14 +136,13 @@ public class SensorsConfiguration {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@PreDestroy
 	public void destroyThreadList() {
 	
 		HashMap<String, StreetLampThread> tmp = MappingThreadsLamps.getInstance();
 		for (Object value : tmp.values()){
-			Thread t = (Thread) value;
-			t.stop();
+			StreetLampThread t = (StreetLampThread) value;
+			t.interrupt();
 		}
 	}
 	
