@@ -77,7 +77,7 @@ public class CRUDServiceImpl implements CRUDService{
 		t.setLigthIntensityAdjustment(Double.parseDouble(intensityAdjustment));
 		
 		JSONObject jo = new JSONObject();
-		jo.put("responseCode", "DeleteOK");
+		jo.put("responseCode", "UpdateOK");
 		ResponseEntity<JSONObject> response = new ResponseEntity<JSONObject>(jo, HttpStatus.OK);
 		return response;
 	}
