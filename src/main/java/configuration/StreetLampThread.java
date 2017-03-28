@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-//import kafka.StreetLigthSensorProducer;
+import kafka.StreetLigthSensorProducer;
 import model.StreetLamp;
 
 import org.json.simple.JSONObject;
@@ -14,7 +14,7 @@ import org.json.simple.JSONObject;
 public class StreetLampThread extends Thread {
 	
 	private StreetLamp streetLamp;
-	//private StreetLigthSensorProducer producer;
+	private StreetLigthSensorProducer producer;
 	private double ligthIntensityAdjustment = 1;
 	private boolean stop = false;
 	private long sleepTime = 10;
@@ -43,10 +43,10 @@ public class StreetLampThread extends Thread {
 	@Override
 	public void run() {
 		
-		//producer = new StreetLigthSensorProducer();
-	    //producer.initialize();
+		producer = new StreetLigthSensorProducer();
+	    producer.initialize();
 		Double tmpLigthIntensity;
-		Double intensityMrn = ThreadLocalRandom.current().nextDouble(0.0, 0.1);
+		Double intensityMrn = 0.0;
 		Double intensityAft = ThreadLocalRandom.current().nextDouble(0.1, 0.3);
 		Double intensityEvng = ThreadLocalRandom.current().nextDouble(0.6, 1);
 		Double intensityNght = ThreadLocalRandom.current().nextDouble(0.5, 0.7);
@@ -109,20 +109,20 @@ public class StreetLampThread extends Thread {
 	        	Date date = new Date();
 	        	jo.put("timestamp", date.getTime()); //add timestamp UTC 1/1/1970 epoch
 
-	        	//producer.publish(this.streetLamp.getId(), jo.toString()); //Publish message to brokers
+	        	producer.publish(this.streetLamp.getId(), jo.toString()); //Publish message to brokers
 	        }
 			try {	
-				Thread.sleep(sleepTime*10000);
+				Thread.sleep(sleepTime*1000);
 			}
 			catch(InterruptedException e) {
-				//producer.closeProducer();
+				producer.closeProducer();
 				Thread.currentThread().interrupt();
 			}	
 		}
 		
 		if(stop){
             // Close the connection between broker and producer
-            //producer.closeProducer();
+            producer.closeProducer();
 
 			Thread.currentThread().interrupt();
 		}

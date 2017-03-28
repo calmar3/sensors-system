@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -85,8 +84,8 @@ public class SensorsConfiguration {
     		String tmp = dateFormat.format(new Date());
     		Date timeStamp = dateFormat.parse(tmp);
     		
-    		int j = Integer.parseInt(numLamp)-1;
-    		while(j>=0){    		
+    		int j = Integer.parseInt(numLamp);
+    		while(j>0){    		
 	    		StreetLamp lp = new StreetLamp();
 	    		lp.setBulbModel(getModel());
 	    		lp.setId(""+Integer.toString(id)+"");
@@ -100,12 +99,9 @@ public class SensorsConfiguration {
 	    		id++;
 	    		j--;
     		}
-	        
-	        
 		}
 		s.close();			
 	}
-	
 	
 	@PostConstruct
 	public void initThreadList() {

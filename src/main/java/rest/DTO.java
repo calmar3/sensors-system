@@ -21,16 +21,6 @@ public class DTO implements Serializable{
 	private String intensityAdjustment;
 	
 	public DTO(){};
-	
-	/*public DTO( String id, String position, String ligthIntensity, String bulbModel, String powerConsumption, String state, String lastSubstitutionDate ) {
-		this.setId(id);
-		this.setPosition(position);
-		this.setLigthIntensity(ligthIntensity);
-		this.setBulbModel(bulbModel);
-		this.setPowerConsumption(powerConsumption);
-		this.setState(state);
-		this.setLastSubstitutionDate(lastSubstitutionDate);
-	}*/
 
 	public String getId() {
 		return id;
