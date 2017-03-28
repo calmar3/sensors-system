@@ -15,26 +15,13 @@ public class StreetLamp{
 	private String powerConsumption;	
 	private String state;
 	private String lastSubstitutionDate;
-	
-	private Street street;
-	
+		
 	public StreetLamp(){}
 	
-	public StreetLamp(String id, String position, String ligthIntensity, 
-			  String bulbModel, String powerConsumption, String state, 
-			  String lastSubstitutionDate){
-		this.id = id;
-		this.position = position;
-		this.ligthIntensity = ligthIntensity;
-		this.bulbModel= bulbModel;
-		this.powerConsumption = powerConsumption;
-		this.state = state;
-		this.lastSubstitutionDate = lastSubstitutionDate;
-		}
 	
 	public StreetLamp(String id, String position, String ligthIntensity, 
 					  String bulbModel, String powerConsumption, String state, 
-					  String lastSubstitutionDate, Street street){
+					  String lastSubstitutionDate){
 		this.id = id;
 		this.position = position;
 		this.ligthIntensity = ligthIntensity;
@@ -42,7 +29,6 @@ public class StreetLamp{
 		this.powerConsumption = powerConsumption;
 		this.state = state;
 		this.lastSubstitutionDate = lastSubstitutionDate;
-		this.street = street;
 	}
 
 	public String getId() {
@@ -101,13 +87,6 @@ public class StreetLamp{
 		this.lastSubstitutionDate = lastSubstitutionDate;
 	}
 	
-	public Street getStreet() {
-		return street;
-	}
-
-	public void setStreet(Street street) {
-		this.street = street;
-	}
 	
 	@SuppressWarnings("unchecked")
 	public static JSONObject toJSONObject(StreetLamp l) throws IllegalArgumentException, IllegalAccessException {

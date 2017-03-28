@@ -1,6 +1,5 @@
 package rest;
 
-import model.Street;
 import model.StreetLamp;
 
 import org.json.simple.JSONObject;
@@ -30,11 +29,9 @@ public class CRUDServiceImpl implements CRUDService{
 		String state = request.getState();
 		String lastSubstitutionDate = request.getLastSubstitutionDate();
 
-		//temp fix
-		Street street = new Street("1", "via di centocelle", "Stud", "500", "0", "5", "10", "50");
-		
+		//temp fix		
 		StreetLamp streetLamp = new StreetLamp(id, position, ligthIntensity, bulbModel, powerConsumption, 
-											   state, lastSubstitutionDate , street);
+											   state, lastSubstitutionDate);
 		
 		streetLampRepository.save(streetLamp);
 		

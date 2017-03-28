@@ -3,6 +3,8 @@ package configuration;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 //import kafka.StreetLigthSensorProducer;
 import model.StreetLamp;
@@ -43,6 +45,13 @@ public class StreetLampThread extends Thread {
 		
 		//producer = new StreetLigthSensorProducer();
 	    //producer.initialize();
+		Double tmpLigthIntensity;
+		Double intensityMrn = ThreadLocalRandom.current().nextDouble(0.0, 0.1);
+		Double intensityAft = ThreadLocalRandom.current().nextDouble(0.1, 0.3);
+		Double intensityEvng = ThreadLocalRandom.current().nextDouble(0.6, 1);
+		Double intensityNght = ThreadLocalRandom.current().nextDouble(0.5, 0.7);
+		Double consumption = ThreadLocalRandom.current().nextDouble(50, 60);
+		
 		
 		while(!stop) {
 			try {
@@ -56,35 +65,33 @@ public class StreetLampThread extends Thread {
 	    		Date timeStamp = null;
 	    		timeStamp = dateFormat.parse(tmp);
 	    		
-	    		Double tmpLigthIntensity;
-	    		
 	    		if(date2.before(timeStamp) && date3.after(timeStamp)){
-	    			tmpLigthIntensity = Double.parseDouble(this.streetLamp.getStreet().getIntensityMrn())*ligthIntensityAdjustment;
+	    			tmpLigthIntensity = intensityMrn*ligthIntensityAdjustment;
 	    			this.streetLamp.setLigthIntensity(tmpLigthIntensity.toString());
 	
 				}
 				else if(date3.before(timeStamp) && date4.after(timeStamp)){
-					tmpLigthIntensity = Double.parseDouble(this.streetLamp.getStreet().getIntensityAft())*ligthIntensityAdjustment;
+					tmpLigthIntensity = intensityAft*ligthIntensityAdjustment;
 	    			this.streetLamp.setLigthIntensity(tmpLigthIntensity.toString());
 	    			
-	    			this.streetLamp.setPowerConsumption(this.streetLamp.getStreet().getConsumption());
+	    			this.streetLamp.setPowerConsumption(consumption.toString());
 	    			this.streetLamp.setState("ON");
 	
 	
 				}
 				else if(date4.before(timeStamp) && date1.after(timeStamp)){
-					tmpLigthIntensity = Double.parseDouble(this.streetLamp.getStreet().getIntensityEvng())*ligthIntensityAdjustment;
+					tmpLigthIntensity = intensityEvng*ligthIntensityAdjustment;
 	    			this.streetLamp.setLigthIntensity(tmpLigthIntensity.toString());
 	    			
-	    			this.streetLamp.setPowerConsumption(this.streetLamp.getStreet().getConsumption());
+	    			this.streetLamp.setPowerConsumption(consumption.toString());
 	    			this.streetLamp.setState("ON");
 	
 				}
 				else if(date1.before(timeStamp) && date2.after(timeStamp)){
-					tmpLigthIntensity = Double.parseDouble(this.streetLamp.getStreet().getIntensityNght())*ligthIntensityAdjustment;
+					tmpLigthIntensity = intensityNght*ligthIntensityAdjustment;
 	    			this.streetLamp.setLigthIntensity(tmpLigthIntensity.toString());
 	    			
-	    			this.streetLamp.setPowerConsumption(this.streetLamp.getStreet().getConsumption());
+	    			this.streetLamp.setPowerConsumption(consumption.toString());
 	    			this.streetLamp.setState("ON");
 				}
 	    		

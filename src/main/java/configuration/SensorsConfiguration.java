@@ -14,7 +14,6 @@ import java.util.Scanner;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import model.Street;
 import model.StreetLamp;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,28 +24,49 @@ public class SensorsConfiguration {
 
 	@Autowired
 	StreetLampRepository streetLampRepository;
-	private ArrayList<Street> streetList;
-
-	public ArrayList<Street> getStreetList() {
-		return streetList;
+	private String numLamp;
+	private String address;
+	private String model;
+	
+	public String getNumLamp() {
+		return numLamp;
 	}
 
-	public void setStreetList(ArrayList<Street> streetList) {
-		this.streetList = streetList;
+	public void setNumLamp(String numLamp) {
+		this.numLamp = numLamp;
 	}
 	
-	public List<Street> readConfig() throws IOException{
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
+	public String getModel() {
+		return model;
+	}
+
+	public void setModel(String model) {
+		this.model = model;
+	}
+	
+	
+	
+	public void ConfigLamp() throws IOException, ParseException{
+		
+		streetLampRepository.deleteAll();
 		
 		File file = new File("resources/Sensors");
 		Scanner s = new Scanner(file);
-
-		ArrayList<Street> list = new ArrayList<Street>();
+    	
+		int id = 1;
 		while (s.hasNext()){
-			Street street = new Street();
 			String [] line = s.nextLine().split("\\s+");
 		    
 		    if(line[0].startsWith("num_lamp:")){
-		    	street.setNumLamp(line[0].substring(9));
+		    	setNumLamp(line[0].substring(9));
         	}else{
         		s.close();
 		    	throw new InvalidObjectException("Invalid configuration file!");
@@ -55,67 +75,37 @@ public class SensorsConfiguration {
 	        	if(i == line[0])
 	        		continue;
 	        	else if(i.startsWith("address:")){
-	        		street.setAddress(i.substring(8).replace("_", " "));
+	        		setAddress(i.substring(8).replace("_", " "));
 	        	}
 	        	else if(i.startsWith("model:")){
-	        		street.setModel(i.substring(6));
-	        	}
-	        	else if(i.startsWith("consumption:")){
-	        		street.setConsumption(i.substring(12));
-	        	}
-	        	else if(i.startsWith("intensity_mrn:")){
-	        		street.setIntensityMrn(i.substring(14));
-	        	}
-	        	else if(i.startsWith("intensity_aft:")){ 
-	        		street.setIntensityAft(i.substring(14));		
-	        	}
-			    else if(i.startsWith("intensity_evng:")){
-			    	street.setIntensityEvng(i.substring(15));
-	        	}
-			    else if(i.startsWith("intensity_nght:")){
-			    	street.setIntensityNght(i.substring(15));
+	        		setModel(i.substring(6));
 	        	}
 	        }
-	        list.add(street);
-		}
-		s.close();	
-		this.setStreetList(list);
-		
-		return this.streetList;
-	}
-	
-	public void ConfigLamp() throws IOException, ParseException{
-
-		streetLampRepository.deleteAll();
-		List<Street> streetList = null;
-		
-		streetList = readConfig();
-		
-    	int id = 1;
-    	for(Street street : streetList){
-    		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+	        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
     		String tmp = dateFormat.format(new Date());
     		Date timeStamp = dateFormat.parse(tmp);
     		
-    		int j = Integer.parseInt(street.getNumLamp());
-    		while(j>0){    		
+    		int j = Integer.parseInt(numLamp)-1;
+    		while(j>=0){    		
 	    		StreetLamp lp = new StreetLamp();
-	    		lp.setBulbModel(street.getModel());
+	    		lp.setBulbModel(getModel());
 	    		lp.setId(""+Integer.toString(id)+"");
 	    		lp.setLigthIntensity("0");
-	    		lp.setPosition(street.getAddress()+", "+j+"");
+	    		lp.setPosition(getAddress()+", "+j+"");
 	    		lp.setPowerConsumption("0");
 	    		lp.setState("OFF");
 	    		lp.setlastSubstitutionDate(""+timeStamp+"");
-	    		lp.setStreet(street);
 	    		streetLampRepository.save(lp);
 	    		
 	    		id++;
 	    		j--;
     		}
-    	}
-    	
+	        
+	        
+		}
+		s.close();			
 	}
+	
 	
 	@PostConstruct
 	public void initThreadList() {
