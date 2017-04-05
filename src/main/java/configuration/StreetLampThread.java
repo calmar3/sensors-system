@@ -3,18 +3,17 @@ package configuration;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import kafka.StreetLigthSensorProducer;
-import model.StreetLamp;
-
 import org.json.simple.JSONObject;
+
+import kafka.StreetLampSensorProducer;
+import model.StreetLamp;
 
 public class StreetLampThread extends Thread {
 	
 	private StreetLamp streetLamp;
-	private StreetLigthSensorProducer producer;
+	private StreetLampSensorProducer producer;
 	private double ligthIntensityAdjustment = 1;
 	private boolean stop = false;
 	private long sleepTime = 10;
@@ -43,7 +42,7 @@ public class StreetLampThread extends Thread {
 	@Override
 	public void run() {
 		
-		producer = new StreetLigthSensorProducer();
+		producer = new StreetLampSensorProducer();
 	    producer.initialize();
 		Double tmpLigthIntensity;
 		Double intensityMrn = 0.0;

@@ -13,50 +13,29 @@ import java.util.Scanner;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import model.StreetLamp;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import model.LigthSensor;
+import model.StreetLamp;
+import util.MappingThreadsToLamps;
+import util.MappingThreadsToLightSensors;
 
 @Component
 public class SensorsConfiguration {
 
 	@Autowired
 	StreetLampRepository streetLampRepository;
-	private String numLamp;
-	private String address;
-	private String model;
-	
-	public String getNumLamp() {
-		return numLamp;
-	}
+	LightSensorRepository sensorLightRepository;
 
-	public void setNumLamp(String numLamp) {
-		this.numLamp = numLamp;
-	}
-	
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	
-	public String getModel() {
-		return model;
-	}
-
-	public void setModel(String model) {
-		this.model = model;
-	}
-	
-	
-	
-	public void ConfigLamp() throws IOException, ParseException{
+	public void ConfigSensors() throws IOException, ParseException{
+		String numLamp=null;
+	    String address=null;
+		String model=null;
 		
 		streetLampRepository.deleteAll();
-		
+		sensorLightRepository.deleteAll();
+
 		File file = new File("resources/Sensors");
 		Scanner s = new Scanner(file);
     	
@@ -65,7 +44,7 @@ public class SensorsConfiguration {
 			String [] line = s.nextLine().split("\\s+");
 		    
 		    if(line[0].startsWith("num_lamp:")){
-		    	setNumLamp(line[0].substring(9));
+		    	numLamp=line[0].substring(9);
         	}else{
         		s.close();
 		    	throw new InvalidObjectException("Invalid configuration file!");
@@ -74,10 +53,10 @@ public class SensorsConfiguration {
 	        	if(i == line[0])
 	        		continue;
 	        	else if(i.startsWith("address:")){
-	        		setAddress(i.substring(8).replace("_", " "));
+	        		address=i.substring(8).replace("_", " ");
 	        	}
 	        	else if(i.startsWith("model:")){
-	        		setModel(i.substring(6));
+	        		model=i.substring(6);
 	        	}
 	        }
 	        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
@@ -87,15 +66,20 @@ public class SensorsConfiguration {
     		int j = Integer.parseInt(numLamp);
     		while(j>0){    		
 	    		StreetLamp lp = new StreetLamp();
-	    		lp.setBulbModel(getModel());
+	    		lp.setBulbModel(model);
 	    		lp.setId(""+Integer.toString(id)+"");
 	    		lp.setLigthIntensity("0");
-	    		lp.setPosition(getAddress()+", "+j+"");
+	    		lp.setPosition(address+", "+j+"");
 	    		lp.setPowerConsumption("0");
 	    		lp.setState("OFF");
 	    		lp.setlastSubstitutionDate(""+timeStamp+"");
 	    		streetLampRepository.save(lp);
 	    		
+	    		LigthSensor sl = new LigthSensor();
+	    		sl.setId(""+Integer.toString(id)+"");
+	    		sl.setLigthIntensity("0");
+	    		sl.setPosition(address+", "+j+"");
+	    		sensorLightRepository.save(sl);
 	    		id++;
 	    		j--;
     		}
@@ -107,29 +91,44 @@ public class SensorsConfiguration {
 	public void initThreadList() {
 		
 		try {
-			ConfigLamp();
+			ConfigSensors();
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
 		}
 		List<StreetLamp> streetLampList = null;
 		streetLampList = streetLampRepository.findAll();
 		
-		for (StreetLamp lamp : streetLampList){
-			StreetLampThread t = new StreetLampThread(lamp);					
-			MappingThreadsLamps.getInstance().put(lamp.getId(), t);
+		List<LigthSensor> sensorLightList = null;
+		sensorLightList = sensorLightRepository.findAll();
+
+		int i;
+		for (i=0; i<streetLampList.size();i++){
+			StreetLampThread tl = new StreetLampThread(streetLampList.get(i));					
+			MappingThreadsToLamps.getInstance().put(streetLampList.get(i).getId(), tl);
+			tl.start();
 			
-			t.start();
+			LigthSensorThread ts = new LigthSensorThread(sensorLightList.get(i));					
+			MappingThreadsToLightSensors.getInstance().put(sensorLightList.get(i).getId(), ts);
+			ts.start();
+
 		}
 	}
 	
 	@PreDestroy
 	public void destroyThreadList() {
 	
-		HashMap<String, StreetLampThread> tmp = MappingThreadsLamps.getInstance();
+		HashMap<String, StreetLampThread> tmp = MappingThreadsToLamps.getInstance();
 		for (Object value : tmp.values()){
 			StreetLampThread t = (StreetLampThread) value;
 			t.interrupt();
 		}
+		
+		HashMap<String, LigthSensorThread> tmps = MappingThreadsToLightSensors.getInstance();
+		for (Object value : tmps.values()){
+			LigthSensorThread ts = (LigthSensorThread) value;
+			ts.interrupt();
+		}
+		
 	}
 	
 }

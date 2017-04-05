@@ -1,12 +1,14 @@
-package configuration;
+package util;
 
 import java.util.HashMap;
 
-public class MappingThreadsLamps {
+import configuration.StreetLampThread;
+
+public class MappingThreadsToLamps {
 	
 	private static HashMap<String, StreetLampThread> instance = null;
 	
-	protected MappingThreadsLamps(){}
+	protected MappingThreadsToLamps(){}
 	
 	public synchronized static final HashMap<String, StreetLampThread> getInstance(){
 		

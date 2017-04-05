@@ -8,9 +8,9 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(basePackageClasses = rest.RestController.class)
 @ComponentScan(basePackageClasses = SensorsConfiguration.class)
-public class StreetLampSensorsApplication {
+public class StreetSensorsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(StreetLampSensorsApplication.class, args);
+		SpringApplication.run(StreetSensorsApplication.class, args);
 	}
 }
