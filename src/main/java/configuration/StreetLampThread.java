@@ -65,12 +65,12 @@ public class StreetLampThread extends Thread {
 	    		timeStamp = dateFormat.parse(tmp);
 	    		
 	    		if(date2.before(timeStamp) && date3.after(timeStamp)){
-	    			tmpLigthIntensity = intensityMrn*ligthIntensityAdjustment;
+	    			tmpLigthIntensity = intensityMrn+ligthIntensityAdjustment;
 	    			this.streetLamp.setLigthIntensity(tmpLigthIntensity.toString());
 	
 				}
 				else if(date3.before(timeStamp) && date4.after(timeStamp)){
-					tmpLigthIntensity = intensityAft*ligthIntensityAdjustment;
+					tmpLigthIntensity = intensityAft+ligthIntensityAdjustment;
 	    			this.streetLamp.setLigthIntensity(tmpLigthIntensity.toString());
 	    			
 	    			this.streetLamp.setPowerConsumption(consumption.toString());
@@ -79,7 +79,7 @@ public class StreetLampThread extends Thread {
 	
 				}
 				else if(date4.before(timeStamp) && date1.after(timeStamp)){
-					tmpLigthIntensity = intensityEvng*ligthIntensityAdjustment;
+					tmpLigthIntensity = intensityEvng+ligthIntensityAdjustment;
 	    			this.streetLamp.setLigthIntensity(tmpLigthIntensity.toString());
 	    			
 	    			this.streetLamp.setPowerConsumption(consumption.toString());
@@ -87,7 +87,7 @@ public class StreetLampThread extends Thread {
 	
 				}
 				else if(date1.before(timeStamp) && date2.after(timeStamp)){
-					tmpLigthIntensity = intensityNght*ligthIntensityAdjustment;
+					tmpLigthIntensity = intensityNght+ligthIntensityAdjustment;
 	    			this.streetLamp.setLigthIntensity(tmpLigthIntensity.toString());
 	    			
 	    			this.streetLamp.setPowerConsumption(consumption.toString());
