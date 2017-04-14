@@ -5,16 +5,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.json.simple.JSONObject;
-
 import kafka.StreetLampSensorProducer;
 import model.StreetLamp;
+
+import org.json.simple.JSONObject;
 
 public class StreetLampThread extends Thread {
 	
 	private StreetLamp streetLamp;
 	private StreetLampSensorProducer producer;
-	private double ligthIntensityAdjustment = 1;
+	private double lightIntensityAdjustment = 1;
 	private boolean stop = false;
 	private long sleepTime = 10;
 	
@@ -23,12 +23,12 @@ public class StreetLampThread extends Thread {
 		this.streetLamp = streetLamp;
 	}
 	
-	public double getLigthIntensityAdjustment() {
-		return ligthIntensityAdjustment;
+	public double getLightIntensityAdjustment() {
+		return lightIntensityAdjustment;
 	}
 
-	public void setLigthIntensityAdjustment(double ligthIntensityAdjustment) {
-		this.ligthIntensityAdjustment = ligthIntensityAdjustment;
+	public void setLightIntensityAdjustment(double lightIntensityAdjustment) {
+		this.lightIntensityAdjustment = lightIntensityAdjustment;
 	}
 	
 	public boolean isStop() {
@@ -44,7 +44,8 @@ public class StreetLampThread extends Thread {
 		
 		producer = new StreetLampSensorProducer();
 	    producer.initialize();
-		Double tmpLigthIntensity;
+	    
+		Double tmpLightIntensity;
 		Double intensityMrn = 0.0;
 		Double intensityAft = ThreadLocalRandom.current().nextDouble(0.1, 0.3);
 		Double intensityEvng = ThreadLocalRandom.current().nextDouble(0.6, 1);
@@ -65,50 +66,51 @@ public class StreetLampThread extends Thread {
 	    		timeStamp = dateFormat.parse(tmp);
 	    		
 	    		if(date2.before(timeStamp) && date3.after(timeStamp)){
-	    			tmpLigthIntensity = intensityMrn+ligthIntensityAdjustment;
-	    			this.streetLamp.setLigthIntensity(tmpLigthIntensity.toString());
+	    			tmpLightIntensity = intensityMrn+lightIntensityAdjustment;
+	    			this.streetLamp.setLightIntensity(tmpLightIntensity);
 	
 				}
 				else if(date3.before(timeStamp) && date4.after(timeStamp)){
-					tmpLigthIntensity = intensityAft+ligthIntensityAdjustment;
-	    			this.streetLamp.setLigthIntensity(tmpLigthIntensity.toString());
+					tmpLightIntensity = intensityAft+lightIntensityAdjustment;
+	    			this.streetLamp.setLightIntensity(tmpLightIntensity);
 	    			
-	    			this.streetLamp.setPowerConsumption(consumption.toString());
-	    			this.streetLamp.setState("ON");
-	
+	    			this.streetLamp.setConsumption(consumption);
+	    			this.streetLamp.setStateOn(true);
 	
 				}
 				else if(date4.before(timeStamp) && date1.after(timeStamp)){
-					tmpLigthIntensity = intensityEvng+ligthIntensityAdjustment;
-	    			this.streetLamp.setLigthIntensity(tmpLigthIntensity.toString());
+					tmpLightIntensity = intensityEvng+lightIntensityAdjustment;
+	    			this.streetLamp.setLightIntensity(tmpLightIntensity);
 	    			
-	    			this.streetLamp.setPowerConsumption(consumption.toString());
-	    			this.streetLamp.setState("ON");
+	    			this.streetLamp.setConsumption(consumption);
+	    			this.streetLamp.setStateOn(true);
 	
 				}
 				else if(date1.before(timeStamp) && date2.after(timeStamp)){
-					tmpLigthIntensity = intensityNght+ligthIntensityAdjustment;
-	    			this.streetLamp.setLigthIntensity(tmpLigthIntensity.toString());
+					tmpLightIntensity = intensityNght+lightIntensityAdjustment;
+	    			this.streetLamp.setLightIntensity(tmpLightIntensity);
 	    			
-	    			this.streetLamp.setPowerConsumption(consumption.toString());
-	    			this.streetLamp.setState("ON");
+	    			this.streetLamp.setConsumption(consumption);
+	    			this.streetLamp.setStateOn(true);
 				}
 	    		
 			} catch (ParseException e1) {
 				e1.printStackTrace();
-			}			
-	        if(this.streetLamp.getState().equals("ON")){//publish tuple on kafka topic
+			}
+			
+			Date date = new Date();
+        	this.streetLamp.setTimestamp(date.getTime());//add timestamp UTC 1/1/1970 epoch
+        	
+	        if(this.streetLamp.isStateOn()){//publish tuple on kafka topic
 	    		JSONObject jo = null;
+	    		
 	        	try {
 					jo = StreetLamp.toJSONObject(this.streetLamp);
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					e.printStackTrace();
 				} 
 	        	
-	        	Date date = new Date();
-	        	jo.put("timestamp", date.getTime()); //add timestamp UTC 1/1/1970 epoch
-
-	        	producer.publish(this.streetLamp.getId(), jo.toString()); //Publish message to brokers
+	        	producer.publish(String.valueOf(this.streetLamp.getLampId()), jo.toString()); //Publish message to brokers
 	        }
 			try {	
 				Thread.sleep(sleepTime*1000);

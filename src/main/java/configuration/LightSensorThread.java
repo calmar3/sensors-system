@@ -7,18 +7,18 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.json.simple.JSONObject;
 
-import kafka.LigthSensorsProducer;
-import model.LigthSensor;
+import kafka.LightSensorsProducer;
+import model.LightSensor;
 
-public class LigthSensorThread extends Thread {
+public class LightSensorThread extends Thread {
 	
-	private LigthSensor sensorLight;
-	private LigthSensorsProducer producer;
+	private LightSensor lightSensor;
+	private LightSensorsProducer producer;
 	private boolean stop = false;
 	
 	
-	public LigthSensorThread(LigthSensor sensorLight) {
-		this.sensorLight = sensorLight;
+	public LightSensorThread(LightSensor sensorLight) {
+		this.lightSensor = sensorLight;
 	}
 	
 	public boolean isStop() {
@@ -32,12 +32,12 @@ public class LigthSensorThread extends Thread {
 	@Override
 	public void run() {
 		
-		producer = new LigthSensorsProducer();
+		producer = new LightSensorsProducer();
 	    producer.initialize();
-		Double ligthIntensityMrn = ThreadLocalRandom.current().nextDouble(0.7, 1);
-		Double ligthIntensityAft = ThreadLocalRandom.current().nextDouble(0.3, 0.7);
-		Double ligthIntensityEvng = ThreadLocalRandom.current().nextDouble(0.1, 0.3);
-		Double ligthIntensityNght = ThreadLocalRandom.current().nextDouble(0.0, 0.2);
+		Double lightIntensityMrn = ThreadLocalRandom.current().nextDouble(0.7, 1);
+		Double lightIntensityAft = ThreadLocalRandom.current().nextDouble(0.3, 0.7);
+		Double lightIntensityEvng = ThreadLocalRandom.current().nextDouble(0.1, 0.3);
+		Double lightIntensityNght = ThreadLocalRandom.current().nextDouble(0.0, 0.2);
 		
 		
 		while(!stop) {
@@ -53,39 +53,41 @@ public class LigthSensorThread extends Thread {
 	    		timeStamp = dateFormat.parse(tmp);
 	    		
 	    		if(date2.before(timeStamp) && date3.after(timeStamp)){
-	    			this.sensorLight.setLigthIntensity(ligthIntensityMrn.toString());
+	    			this.lightSensor.setLightIntensity(lightIntensityMrn);
 	
 				}
 				else if(date3.before(timeStamp) && date4.after(timeStamp)){ 			
-					this.sensorLight.setLigthIntensity(ligthIntensityAft.toString());
+					this.lightSensor.setLightIntensity(lightIntensityAft);
 	
 	
 				}
 				else if(date4.before(timeStamp) && date1.after(timeStamp)){
-					this.sensorLight.setLigthIntensity(ligthIntensityEvng.toString());
+					this.lightSensor.setLightIntensity(lightIntensityEvng);
 	    			
 	    			
 	
 				}
 				else if(date1.before(timeStamp) && date2.after(timeStamp)){
-					this.sensorLight.setLigthIntensity( ligthIntensityNght.toString());
+					this.lightSensor.setLightIntensity( lightIntensityNght);
 
 				}
 	    		
 			} catch (ParseException e1) {
 				e1.printStackTrace();
-			}			
+			}	
+			
+			Date date = new Date();
+        	this.lightSensor.setTimestamp(date.getTime());//add timestamp UTC 1/1/1970 epoch
+			
 	        //publish tuple on kafka topic
 	    	JSONObject jo = null;
 	        try {
-				jo = LigthSensor.toJSONObject(this.sensorLight);
+				jo = LightSensor.toJSONObject(this.lightSensor);
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 					e.printStackTrace();
 			} 
 	        	
-	        Date date = new Date();
-	        jo.put("timestamp", date.getTime()); //add timestamp UTC 1/1/1970 epoch
-        	producer.publish(this.sensorLight.getId(), jo.toString()); //Publish message to brokers
+        	producer.publish(String.valueOf(this.lightSensor.getLightSensorId()), jo.toString()); //Publish message to brokers
 	    }
 				
 		if(stop){

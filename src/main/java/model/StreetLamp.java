@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 import org.json.simple.JSONObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,98 +10,162 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class StreetLamp{
 
 	@Id
-	private String id;	
-	private String position;
-	private String ligthIntensity;
-	private String bulbModel;	
-	private String powerConsumption;	
-	private String state;
-	private String lastSubstitutionDate;
+	private long lampId;
+	private List<Long> cellId;
+	private double consumption;	
+	private String address;
+	private String city;
+	private String longitude;
+	private String latitude;
+	private long timestamp;
+	private long lastSubstitutionDate;
+	private long residualLifeTime;
+	private boolean stateOn;
+	private double lightIntensity;
+	private String model;	
 		
 	public StreetLamp(){}
 	
-	
-	public StreetLamp(String id, String position, String ligthIntensity, 
-					  String bulbModel, String powerConsumption, String state, 
-					  String lastSubstitutionDate){
-		this.id = id;
-		this.position = position;
-		this.ligthIntensity = ligthIntensity;
-		this.bulbModel= bulbModel;
-		this.powerConsumption = powerConsumption;
-		this.state = state;
+	public StreetLamp(long lampId, List<Long> cellId, double consumption, 
+					  String address, String city, String longitude, String latitude, 
+					  long timestamp, long lastSubstitutionDate, long residualLifeTime,
+					  boolean stateOn, double lightIntensity, String model){
+		this.lampId = lampId;
+		this.cellId = cellId;
+		this.consumption = consumption;
+		this.address = address;
+		this.city = city;
+		this.longitude = longitude;
+		this.latitude = latitude;
+		this.timestamp = timestamp;
 		this.lastSubstitutionDate = lastSubstitutionDate;
+		this.residualLifeTime = residualLifeTime;
+		this.stateOn = stateOn;
+		this.lightIntensity = lightIntensity;
+		this.model = model;
 	}
 
-	public String getId() {
-		return id;
+	public long getLampId() {
+		return lampId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setLampId(long lampId) {
+		this.lampId = lampId;
+	}
+
+	public List<Long> getCellId() {
+		return cellId;
+	}
+
+	public void setCellId(List<Long> cellId) {
+		this.cellId = cellId;
+	}
+
+	public double getConsumption() {
+		return consumption;
+	}
+
+	public void setConsumption(double consumption) {
+		this.consumption = consumption;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	
-	public String getPosition() {
-		return position;
+	public String getCity() {
+		return city;
 	}
 
-	public void setPosition(String position) {
-		this.position = position;
-	}
-	
-	public String getLigthIntensity() {
-		return ligthIntensity;
+	public void setCity(String city) {
+		this.city = city;
 	}
 
-	public void setLigthIntensity(String ligthIntensity) {
-		this.ligthIntensity = ligthIntensity;
-	}
-	
-	public String getBulbModel() {
-		return bulbModel;
+	public String getLongitude() {
+		return longitude;
 	}
 
-	public void setBulbModel(String bulbModel) {
-		this.bulbModel = bulbModel;
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 
-	public String getPowerConsumption() {
-		return powerConsumption;
+	public String getLatitude() {
+		return latitude;
 	}
 
-	public void setPowerConsumption(String powerConsumption) {
-		this.powerConsumption = powerConsumption;
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
 	}
 
-	public String getState() {
-		return state;
+	public long getTimestamp() {
+		return timestamp;
 	}
 
-	public void setState(String state) {
-		this.state = state;
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 
-	public String getLastSubstitutionDate() {
+	public long getLastSubstitutionDate() {
 		return lastSubstitutionDate;
 	}
 
-	public void setlastSubstitutionDate(String lastSubstitutionDate) {
+	public void setLastSubstitutionDate(long lastSubstitutionDate) {
 		this.lastSubstitutionDate = lastSubstitutionDate;
 	}
-	
-	
+
+	public long getResidualLifeTime() {
+		return residualLifeTime;
+	}
+
+	public void setResidualLifeTime(long residualLifeTime) {
+		this.residualLifeTime = residualLifeTime;
+	}
+
+	public boolean isStateOn() {
+		return stateOn;
+	}
+
+	public void setStateOn(boolean stateOn) {
+		this.stateOn = stateOn;
+	}
+
+	public double getLightIntensity() {
+		return lightIntensity;
+	}
+
+	public void setLightIntensity(double lightIntensity) {
+		this.lightIntensity = lightIntensity;
+	}
+
+	public String getModel() {
+		return model;
+	}
+
+	public void setModel(String model) {
+		this.model = model;
+	}
+
 	@SuppressWarnings("unchecked")
 	public static JSONObject toJSONObject(StreetLamp l) throws IllegalArgumentException, IllegalAccessException {
 		
 		JSONObject jo = new JSONObject();
 			
-			jo.put("bulbModel", l.getBulbModel());
-			jo.put("ligthIntensity", l.getLigthIntensity().toString());
-			jo.put("id", l.getId());
-			jo.put("position", l.getPosition());
-			jo.put("powerConsumption", l.getPowerConsumption());
-			jo.put("state", l.getState());
+			jo.put("lampId", l.getLampId());
+			jo.put("cellId", l.getCellId());
+			jo.put("consumption", l.getConsumption());
+			jo.put("address", l.getAddress());
+			jo.put("longitude", l.getLongitude());
+			jo.put("latitude", l.getLatitude());
+			jo.put("timestamp", l.getTimestamp());
 			jo.put("lastSubstitutionDate", l.getLastSubstitutionDate());
+			jo.put("residualLifeTime", l.getResidualLifeTime());
+			jo.put("stateOn", l.isStateOn());
+			jo.put("lightIntensity", l.getLightIntensity());
+			jo.put("model", l.getModel());
 		
 		return jo;
 	}

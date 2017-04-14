@@ -6,7 +6,7 @@ import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
 
-public class LigthSensorsProducer {
+public class LightSensorsProducer {
       
 	private static Producer<String, String> producer;
     public final static String brokerList = "localhost:9092,localhost:9093";

@@ -30,7 +30,7 @@ public class RestController {
 	
 	}
 	
-	@RequestMapping(value = "/adjustStreetLampLigthIntensity/", method = RequestMethod.POST) 
+	@RequestMapping(value = "/adjustStreetLampLightIntensity/", method = RequestMethod.POST) 
 	public ResponseEntity<JSONObject> update(@RequestBody DTO request){
 	
 		return crudService.updateStreetLamp(request);

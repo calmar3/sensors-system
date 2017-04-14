@@ -9,10 +9,10 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface StreetLampRepository extends MongoRepository<StreetLamp, String>{
 	
 	public List<StreetLamp> findAll();
-	public StreetLamp findById(String id);
+	public StreetLamp findByLampId(long id);
 	@SuppressWarnings("unchecked")
 	public StreetLamp save(StreetLamp streetLamp);
 	public void deleteAll();
-	public void delete(String id);
+	public void deleteByLampId(long id);
 
 }

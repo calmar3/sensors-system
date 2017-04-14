@@ -10,7 +10,7 @@ public class StreetLampSensorProducer {
       
 	private static Producer<String, String> producer;
     public final static String brokerList = "localhost:9092,localhost:9093";
-    private static final String TOPIC = "StreetLigthSensorData";
+    private static final String TOPIC = "StreetLightSensorData";
       
     public void initialize() {
     	Properties props = new Properties();
