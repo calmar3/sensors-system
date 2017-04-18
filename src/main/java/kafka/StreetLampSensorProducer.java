@@ -9,8 +9,8 @@ import kafka.producer.ProducerConfig;
 public class StreetLampSensorProducer {
       
 	private static Producer<String, String> producer;
-    public final static String brokerList = "localhost:9092,localhost:9093";
-    private static final String TOPIC = "StreetLightSensorData";
+    public final static String brokerList = "localhost:9092";
+    private static final String TOPIC = "lamp_data";
       
     public void initialize() {
     	Properties props = new Properties();

@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kafka.StreetLampSensorProducer;
 import model.StreetLamp;
 
@@ -17,10 +19,11 @@ public class StreetLampThread extends Thread {
 	private double lightIntensityAdjustment = 1;
 	private boolean stop = false;
 	private long sleepTime = 10;
-	
+	private ObjectMapper mapper = null;
 	
 	public StreetLampThread(StreetLamp streetLamp) {
 		this.streetLamp = streetLamp;
+		this.mapper = new ObjectMapper();
 	}
 	
 	public double getLightIntensityAdjustment() {
@@ -100,20 +103,22 @@ public class StreetLampThread extends Thread {
 			
 			Date date = new Date();
         	this.streetLamp.setTimestamp(date.getTime());//add timestamp UTC 1/1/1970 epoch
-        	
+			this.streetLamp.setResidualLifeTime(this.streetLamp.getTimestamp() - this.streetLamp.getLastSubstitutionDate());
+
 	        if(this.streetLamp.isStateOn()){//publish tuple on kafka topic
-	    		JSONObject jo = null;
-	    		
-	        	try {
-					jo = StreetLamp.toJSONObject(this.streetLamp);
-				} catch (IllegalArgumentException | IllegalAccessException e) {
+
+				String jsonInString = new String("");
+				try {
+
+					jsonInString = this.mapper.writeValueAsString(this.streetLamp);
+					producer.publish(String.valueOf(this.streetLamp.getLampId()), jsonInString); //Publish message to brokers
+
+				} catch (JsonProcessingException e) {
 					e.printStackTrace();
-				} 
-	        	
-	        	producer.publish(String.valueOf(this.streetLamp.getLampId()), jo.toString()); //Publish message to brokers
+				}
 	        }
 			try {	
-				Thread.sleep(sleepTime*1000);
+				Thread.sleep(sleepTime*100);
 			}
 			catch(InterruptedException e) {
 				producer.closeProducer();
