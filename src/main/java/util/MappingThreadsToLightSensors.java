@@ -2,7 +2,7 @@ package util;
 
 import java.util.HashMap;
 
-import configuration.LightSensorThread;
+import thread.LightSensorThread;
 
 public class MappingThreadsToLightSensors {
 	
@@ -11,7 +11,6 @@ public class MappingThreadsToLightSensors {
 	protected MappingThreadsToLightSensors(){}
 	
 	public synchronized static final HashMap<Long, LightSensorThread> getInstance(){
-		
 		if(instance == null)
 			instance = new HashMap<Long, LightSensorThread>();
 		

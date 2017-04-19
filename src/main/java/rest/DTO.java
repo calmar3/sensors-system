@@ -2,7 +2,6 @@ package rest;
 
 
 import java.io.Serializable;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -13,7 +12,6 @@ public class DTO implements Serializable{
 	
 	@JsonInclude(Include.NON_NULL)
 	private long lampId;
-	private List<Long> cellId;
 	private double consumption;	
 	private String address;
 	private String longitude;
@@ -34,14 +32,6 @@ public class DTO implements Serializable{
 
 	public void setLampId(long lampId) {
 		this.lampId = lampId;
-	}
-
-	public List<Long> getCellId() {
-		return cellId;
-	}
-
-	public void setCellId(List<Long> cellId) {
-		this.cellId = cellId;
 	}
 
 	public double getConsumption() {

@@ -1,7 +1,5 @@
 package model;
 
-import java.util.List;
-
 import org.json.simple.JSONObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,7 +9,6 @@ public class StreetLamp{
 
 	@Id
 	private long lampId;
-	private List<Long> cellId;
 	private double consumption;	
 	private String address;
 	private String city;
@@ -26,12 +23,11 @@ public class StreetLamp{
 		
 	public StreetLamp(){}
 	
-	public StreetLamp(long lampId, List<Long> cellId, double consumption, 
+	public StreetLamp(long lampId, double consumption, 
 					  String address, String city, String longitude, String latitude, 
 					  long timestamp, long lastSubstitutionDate, long residualLifeTime,
 					  boolean stateOn, double lightIntensity, String model){
 		this.lampId = lampId;
-		this.cellId = cellId;
 		this.consumption = consumption;
 		this.address = address;
 		this.city = city;
@@ -51,14 +47,6 @@ public class StreetLamp{
 
 	public void setLampId(long lampId) {
 		this.lampId = lampId;
-	}
-
-	public List<Long> getCellId() {
-		return cellId;
-	}
-
-	public void setCellId(List<Long> cellId) {
-		this.cellId = cellId;
 	}
 
 	public double getConsumption() {
@@ -155,7 +143,6 @@ public class StreetLamp{
 		JSONObject jo = new JSONObject();
 			
 			jo.put("lampId", l.getLampId());
-			jo.put("cellId", l.getCellId());
 			jo.put("consumption", l.getConsumption());
 			jo.put("address", l.getAddress());
 			jo.put("longitude", l.getLongitude());
