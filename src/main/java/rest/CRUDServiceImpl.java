@@ -23,7 +23,7 @@ public class CRUDServiceImpl implements CRUDService{
 	@Autowired
 	StreetLampRepository streetLampRepository;
 	@Autowired
-	LightSensorRepository sensorLightRepository;
+	LightSensorRepository lightSensorRepository;
 	
 	private StreetLampThread lastLampThread = null;
 	private LightSensorThread lastLigthSensorThread = null;
@@ -54,19 +54,19 @@ public class CRUDServiceImpl implements CRUDService{
 		
 		//parse and save sensorLight
 		LightSensor sensorLight= new LightSensor(id, 0, address, 0);
-		sensorLightRepository.save(sensorLight);
+		lightSensorRepository.save(sensorLight);
 
 		//create new lampThread if necessary
 		if(this.lastLampThread == null || this.lastLampThread.getStreetLampList().size() > SensorsConfiguration.LAMPS_FOR_THREAD){
 			StreetLampThread t = new StreetLampThread();
 			t.getStreetLampList().add(streetLamp);
 			MappingThreadsToLamps.getInstance().put(id, t);
-			t.getListAdjustment().getMappingAdjustmentToLamps().put(id, 1.0);
+			t.getListAdjustment().getMappingAdjustmentToLamps().put(id, 0.0);
 			this.lastLampThread = t;
 			t.start();
 		}
 		else{
-			this.lastLampThread.getListAdjustment().getMappingAdjustmentToLamps().put(id, 1.0);
+			this.lastLampThread.getListAdjustment().getMappingAdjustmentToLamps().put(id, 0.0);
 			this.lastLampThread.getStreetLampList().add(streetLamp);
 		}
 		
@@ -92,23 +92,34 @@ public class CRUDServiceImpl implements CRUDService{
 
 		//delete lamp
 		long id = request.getLampId();
+		StreetLamp streetLamp = streetLampRepository.findByLampId(id);
 		streetLampRepository.deleteByLampId(id);
 			
 		//stop lampThread() if necessary
 		StreetLampThread lampThread = (StreetLampThread) MappingThreadsToLamps.getInstance().get(id);
-		lampThread.getListAdjustment().getMappingAdjustmentToLamps().remove(id);
-		if(lampThread.getStreetLampList().isEmpty()){
+		
+		if(lampThread.getStreetLampList().size() > 1){
+			lampThread.getListAdjustment().getMappingAdjustmentToLamps().remove(id);
+			lampThread.getStreetLampList().remove(streetLamp);
+		}
+		else {
 			lampThread.setStop(true);
+			this.lastLampThread = null;
 		}
 		MappingThreadsToLamps.getInstance().remove(id);
 		
 		//delete light sensor
-		sensorLightRepository.deleteByLightSensorId(id);
+		LightSensor lightSensor = lightSensorRepository.findByLightSensorId(id);
+		lightSensorRepository.deleteByLightSensorId(id);
 		
 		//stop lightThread() if necessary
 		LightSensorThread lightThread = (LightSensorThread) MappingThreadsToLightSensors.getInstance().get(id);
-		if(lightThread.getLightSensorList().isEmpty()){
+		if(lightThread.getLightSensorList().size() > 1){
+			lightThread.getLightSensorList().remove(lightSensor);
+		}
+		else {
 			lightThread.setStop(true);
+			this.lastLigthSensorThread = null;
 		}
 		MappingThreadsToLightSensors.getInstance().remove(id);
 		

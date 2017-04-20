@@ -17,7 +17,7 @@ import configuration.KafkaProducer;
 public class StreetLampThread extends Thread {
 	
 	private static final String TOPIC = "lamp_data";
-	private final static long sleepTime = 500;
+	private final static long sleepTime = 10000;
 	
 	private List<StreetLamp> streetLampList;
 	private MappingAdjustmentToLamps listAdjustment;
@@ -105,7 +105,7 @@ public class StreetLampThread extends Thread {
 			
         	for(StreetLamp sl: streetLampList){
         		sl.setStateOn(tmpStateOn);
-        		if(sl.isStateOn()){
+        		if(sl.isStateOn() && !stop){
 	        		Date date = new Date();
 	            	sl.setTimestamp(date.getTime());//add timestamp UTC 1/1/1970 epoch
 	            	sl.setResidualLifeTime(sl.getTimestamp() - sl.getLastSubstitutionDate());//add timestamp UTC 1/1/1970 epoch

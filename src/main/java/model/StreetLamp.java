@@ -144,6 +144,7 @@ public class StreetLamp{
 			
 			jo.put("lampId", l.getLampId());
 			jo.put("consumption", l.getConsumption());
+			jo.put("city", l.getCity());
 			jo.put("address", l.getAddress());
 			jo.put("longitude", l.getLongitude());
 			jo.put("latitude", l.getLatitude());

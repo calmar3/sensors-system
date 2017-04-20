@@ -95,7 +95,7 @@ public class LightSensorThread extends Thread {
             	//System.out.println("LightSensor"+Thread.currentThread().getName()+" lamp id "+ls.getLightSensorId());
             	KafkaProducer.send(TOPIC, jo.toString());
         	}
-		
+        	
 		}
 		if(stop){
 			Thread.currentThread().interrupt();
