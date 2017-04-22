@@ -21,7 +21,7 @@ public class DTO implements Serializable{
 	private boolean stateOn;
 	private double lightIntensity;
 	private String model;
-	private double intensityAdjustment;
+	private double lightIntensityAdjustment;
 	private String city;
 	
 	public DTO(){}
@@ -106,12 +106,12 @@ public class DTO implements Serializable{
 		this.model = model;
 	}
 
-	public double getIntensityAdjustment() {
-		return intensityAdjustment;
+	public double getLightIntensityAdjustment() {
+		return lightIntensityAdjustment;
 	}
 
-	public void setIntensityAdjustment(double intensityAdjustment) {
-		this.intensityAdjustment = intensityAdjustment;
+	public void setLightIntensityAdjustment(double lightIntensityAdjustment) {
+		this.lightIntensityAdjustment = lightIntensityAdjustment;
 	}
 
 	public String getCity() {

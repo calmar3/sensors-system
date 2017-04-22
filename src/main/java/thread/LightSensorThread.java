@@ -92,9 +92,16 @@ public class LightSensorThread extends Thread {
     			} catch (IllegalArgumentException | IllegalAccessException e) {
     				e.printStackTrace();
     			}
-            	//System.out.println("LightSensor"+Thread.currentThread().getName()+" lamp id "+ls.getLightSensorId());
+            	System.out.println("LightSensor"+Thread.currentThread().getName()+" lamp id "+ls.getLightSensorId()+" lightIntensity "+tmpLightIntensity+"\n");
             	KafkaProducer.send(TOPIC, jo.toString());
         	}
+        	
+        	try {	
+				Thread.sleep(1000);
+			}
+			catch(InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
         	
 		}
 		if(stop){

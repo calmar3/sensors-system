@@ -133,11 +133,12 @@ public class CRUDServiceImpl implements CRUDService{
 	public ResponseEntity<JSONObject> updateStreetLamp(DTO request) {
 		
 		Long id = request.getLampId();
-		double intensityAdjustment = request.getIntensityAdjustment();
+		double intensityAdjustment = request.getLightIntensityAdjustment();
 		
 		//update thread lightIntensityAdjustment
 		StreetLampThread t = (StreetLampThread) MappingThreadsToLamps.getInstance().get(id);
 		t.getListAdjustment().getMappingAdjustmentToLamps().replace(id, intensityAdjustment);
+		System.out.println("Received lightIntensityAdjustment from local-controller for streetLamp "+id+" with value "+intensityAdjustment+"\n");
 		
 		JSONObject jo = new JSONObject();
 		jo.put("responseCode", "UpdateOK");

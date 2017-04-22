@@ -119,7 +119,7 @@ public class StreetLampThread extends Thread {
         			} catch (IllegalArgumentException | IllegalAccessException e) {
         				e.printStackTrace();
         			}
-	        		//System.out.println("StreetLamp"+Thread.currentThread().getName()+" lamp id "+sl.getLampId()+" lightIntesity "+sl.getLightIntensity()+"\n");
+	        		System.out.println("StreetLamp"+Thread.currentThread().getName()+" lamp id "+sl.getLampId()+" lightIntesity "+sl.getLightIntensity()+"\n");
                 	KafkaProducer.send(TOPIC, jo.toString());
         		}
         	}

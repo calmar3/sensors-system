@@ -36,7 +36,7 @@ public class SensorsConfiguration {
 	public void InitSensorsDB() throws IOException, ParseException{
 		
 		streetLampRepository.deleteAll();
-		//lightSensorRepository.deleteAll();
+		lightSensorRepository.deleteAll();
     	
         ObjectMapper mapper = new ObjectMapper();
         List<StreetLamp> streetLampList = mapper.readValue(new File("data/dataset.json"), new TypeReference<List<StreetLamp>>(){});
@@ -44,14 +44,14 @@ public class SensorsConfiguration {
         for(StreetLamp sl: streetLampList){
 			streetLampRepository.save(sl);
 			
-//			LightSensor lightSensor = new LightSensor();
-//			lightSensor.setLightSensorId(sl.getLampId());
-//			lightSensor.setLightIntensity(0);
-//			lightSensor.setAddress(sl.getAddress());
-//			lightSensor.setTimestamp(0);
-//			lightSensorRepository.save(lightSensor);
-			
-			if(sl.getLampId() == 40)//to test with less lamp
+	 		LightSensor lightSensor = new LightSensor();
+	 		lightSensor.setLightSensorId(sl.getLampId());
+	 		lightSensor.setLightIntensity(0);
+	 		lightSensor.setAddress(sl.getAddress());
+	 		lightSensor.setTimestamp(0);
+	 		lightSensorRepository.save(lightSensor);
+ 		
+			if(sl.getLampId() == 5)//to test with less lamp
 				break;
 		}
 	}
@@ -69,22 +69,22 @@ public class SensorsConfiguration {
 		List<StreetLamp> streetLampList = null;
 		streetLampList = streetLampRepository.findAll();
 		
-		//List<LightSensor> sensorLightList = null;
-		//sensorLightList = lightSensorRepository.findAll();
+		List<LightSensor> sensorLightList = null;
+		sensorLightList = lightSensorRepository.findAll();
 
 		for(int i=0; i<streetLampList.size(); i+=LAMPS_FOR_THREAD){
 			StreetLampThread lampThread = new StreetLampThread();
-			//LightSensorThread lightThread = new LightSensorThread();	
+			LightSensorThread lightThread = new LightSensorThread();	
 			for(int j=0; j<LAMPS_FOR_THREAD && i+j <= streetLampList.size()-1; j++){
-				MappingThreadsToLamps.getInstance().put(streetLampList.get(i+j).getLampId(), lampThread);
-				lampThread.getListAdjustment().getMappingAdjustmentToLamps().put(streetLampList.get(i+j).getLampId(), 0.0);
+    			MappingThreadsToLamps.getInstance().put(streetLampList.get(i+j).getLampId(), lampThread);
+     			lampThread.getListAdjustment().getMappingAdjustmentToLamps().put(streetLampList.get(i+j).getLampId(), 0.0);
 				lampThread.getStreetLampList().add(streetLampList.get(i+j));
 				
-				//MappingThreadsToLightSensors.getInstance().put(sensorLightList.get(i+j).getLightSensorId(), lightThread);
-				//lightThread.getLightSensorList().add(sensorLightList.get(i+j));
+				MappingThreadsToLightSensors.getInstance().put(sensorLightList.get(i+j).getLightSensorId(), lightThread);
+				lightThread.getLightSensorList().add(sensorLightList.get(i+j));
 			}
 			lampThread.start();
-			//lightThread.start();
+			lightThread.start();
 		}
 	}
 	
