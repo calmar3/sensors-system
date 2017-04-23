@@ -1,5 +1,6 @@
 package thread;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -109,7 +110,12 @@ public class StreetLampThread extends Thread {
 	        		Date date = new Date();
 	            	sl.setTimestamp(date.getTime());//add timestamp UTC 1/1/1970 epoch
 	            	sl.setResidualLifeTime(sl.getTimestamp() - sl.getLastSubstitutionDate());//add timestamp UTC 1/1/1970 epoch
-	        		sl.setLightIntensity(tmpLightIntensity+this.listAdjustment.getMappingAdjustmentToLamps().get(sl.getLampId()));
+	        		
+	            	BigDecimal bg = new BigDecimal(tmpLightIntensity+this.listAdjustment.getMappingAdjustmentToLamps().get(sl.getLampId())); 
+	        		bg = bg.setScale(2, BigDecimal.ROUND_HALF_UP);
+	        		double intensity = bg.doubleValue();
+	            	
+	        		sl.setLightIntensity(intensity);
 	        		sl.setConsumption(tmpConsumption);
 	        		sl.setStateOn(tmpStateOn);
 	        		

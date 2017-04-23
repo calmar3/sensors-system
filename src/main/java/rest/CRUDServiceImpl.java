@@ -1,5 +1,7 @@
 package rest;
 
+import java.math.BigDecimal;
+
 import model.LightSensor;
 import model.StreetLamp;
 
@@ -137,7 +139,19 @@ public class CRUDServiceImpl implements CRUDService{
 		
 		//update thread lightIntensityAdjustment
 		StreetLampThread t = (StreetLampThread) MappingThreadsToLamps.getInstance().get(id);
-		t.getListAdjustment().getMappingAdjustmentToLamps().replace(id, intensityAdjustment);
+		if(t.getListAdjustment().getMappingAdjustmentToLamps().get(id) == null){
+			JSONObject jo = new JSONObject();
+			jo.put("responseCode", "UpdateError");
+			ResponseEntity<JSONObject> response = new ResponseEntity<JSONObject>(jo, HttpStatus.NOT_FOUND);
+			return response;
+		}
+		double oldAdjustement = t.getListAdjustment().getMappingAdjustmentToLamps().get(id);
+		
+		BigDecimal bg = new BigDecimal(oldAdjustement + intensityAdjustment); 
+		bg = bg.setScale(2, BigDecimal.ROUND_HALF_UP);
+		double intensity = bg.doubleValue();
+		
+		t.getListAdjustment().getMappingAdjustmentToLamps().replace(id, intensity);
 		System.out.println("Received lightIntensityAdjustment from local-controller for streetLamp "+id+" with value "+intensityAdjustment+"\n");
 		
 		JSONObject jo = new JSONObject();

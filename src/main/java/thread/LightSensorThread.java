@@ -1,5 +1,6 @@
 package thread;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -84,7 +85,12 @@ public class LightSensorThread extends Thread {
         	for(LightSensor ls: lightSensorList){
         		Date date = new Date();
             	ls.setTimestamp(date.getTime());//add timestamp UTC 1/1/1970 epoch
-        		ls.setLightIntensity(tmpLightIntensity);
+            	
+            	BigDecimal bg = new BigDecimal(tmpLightIntensity); 
+        		bg = bg.setScale(2, BigDecimal.ROUND_HALF_UP);
+        		double intensity = bg.doubleValue();
+            	
+        		ls.setLightIntensity(intensity);
         		
         		JSONObject jo = null;
             	try {
@@ -92,12 +98,12 @@ public class LightSensorThread extends Thread {
     			} catch (IllegalArgumentException | IllegalAccessException e) {
     				e.printStackTrace();
     			}
-            	System.out.println("LightSensor"+Thread.currentThread().getName()+" lamp id "+ls.getLightSensorId()+" lightIntensity "+tmpLightIntensity+"\n");
+            	System.out.println("LightSensor"+Thread.currentThread().getName()+" lamp id "+ls.getLightSensorId()+" lightIntensity "+intensity+"\n");
             	KafkaProducer.send(TOPIC, jo.toString());
         	}
         	
         	try {	
-				Thread.sleep(1000);
+				Thread.sleep(10000);
 			}
 			catch(InterruptedException e) {
 				Thread.currentThread().interrupt();

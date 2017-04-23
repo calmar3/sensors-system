@@ -51,7 +51,7 @@ public class SensorsConfiguration {
 	 		lightSensor.setTimestamp(0);
 	 		lightSensorRepository.save(lightSensor);
  		
-			if(sl.getLampId() == 5)//to test with less lamp
+			if(sl.getLampId() == 10)//to test with less lamp
 				break;
 		}
 	}
