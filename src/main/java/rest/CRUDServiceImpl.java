@@ -7,6 +7,7 @@ import model.StreetLamp;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,13 @@ import thread.StreetLampThread;
 import util.MappingThreadsToLamps;
 import util.MappingThreadsToLightSensors;
 import configuration.LightSensorRepository;
-import configuration.SensorsConfiguration;
 import configuration.StreetLampRepository;
 
 @Service("CRUDService")
 public class CRUDServiceImpl implements CRUDService{
 
+	@Value("${lamps.for.thread}")
+	public int LAMPS_FOR_THREAD;
 	@Autowired
 	StreetLampRepository streetLampRepository;
 	@Autowired
@@ -34,6 +36,8 @@ public class CRUDServiceImpl implements CRUDService{
 	@Override
 	public ResponseEntity<JSONObject> insertStreetLamp(DTO request) {
 
+		System.out.println("\n\n\n\n\n"+LAMPS_FOR_THREAD+"\n\n\n\n\n");
+		
 		//parse and save streetLamp
 		long id = request.getLampId();
 		double lightIntensity = request.getLightIntensity();
@@ -59,7 +63,7 @@ public class CRUDServiceImpl implements CRUDService{
 		lightSensorRepository.save(sensorLight);
 
 		//create new lampThread if necessary
-		if(this.lastLampThread == null || this.lastLampThread.getStreetLampList().size() > SensorsConfiguration.LAMPS_FOR_THREAD){
+		if(this.lastLampThread == null || this.lastLampThread.getStreetLampList().size() > LAMPS_FOR_THREAD){
 			StreetLampThread t = new StreetLampThread();
 			t.getStreetLampList().add(streetLamp);
 			MappingThreadsToLamps.getInstance().put(id, t);
@@ -73,7 +77,7 @@ public class CRUDServiceImpl implements CRUDService{
 		}
 		
 		//create new sensorThread if necessary
-		if(this.lastLigthSensorThread == null || this.lastLigthSensorThread.getLightSensorList().size() > SensorsConfiguration.LAMPS_FOR_THREAD){
+		if(this.lastLigthSensorThread == null || this.lastLigthSensorThread.getLightSensorList().size() > LAMPS_FOR_THREAD){
 			LightSensorThread t = new LightSensorThread();
 			t.getLightSensorList().add(sensorLight);
 			MappingThreadsToLightSensors.getInstance().put(id, t);
@@ -152,7 +156,7 @@ public class CRUDServiceImpl implements CRUDService{
 		double intensity = bg.doubleValue();
 		
 		t.getListAdjustment().getMappingAdjustmentToLamps().replace(id, intensity);
-		System.out.println("Received lightIntensityAdjustment from local-controller for streetLamp "+id+" with value "+intensityAdjustment+"\n");
+		//System.out.println("Received lightIntensityAdjustment from local-controller for streetLamp "+id+" with value "+intensityAdjustment+"\n");
 		
 		JSONObject jo = new JSONObject();
 		jo.put("responseCode", "UpdateOK");

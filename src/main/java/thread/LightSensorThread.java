@@ -16,7 +16,8 @@ import configuration.KafkaProducer;
 
 public class LightSensorThread extends Thread {
 	
-	private static final String TOPIC = "light_sensor_data";
+	private String LIGHT_SENSOR_TOPIC;
+	private long LIGHTSENSOR_THREAD_SLEEPTIME;
 	
 	private List<LightSensor> lightSensorList;
 	private boolean stop;
@@ -24,6 +25,14 @@ public class LightSensorThread extends Thread {
 	public LightSensorThread(){
 		this.lightSensorList = new ArrayList<LightSensor>();
 		this.stop = false;
+	}
+	
+	public void setTopic(String topic){
+		this.LIGHT_SENSOR_TOPIC = topic;
+	}
+	
+	public void setSleepTime(long sleepTime){
+		this.LIGHTSENSOR_THREAD_SLEEPTIME = sleepTime;
 	}
 	
 	public List<LightSensor> getLightSensorList() {
@@ -98,17 +107,16 @@ public class LightSensorThread extends Thread {
     			} catch (IllegalArgumentException | IllegalAccessException e) {
     				e.printStackTrace();
     			}
-            	System.out.println("LightSensor"+Thread.currentThread().getName()+" lamp id "+ls.getLightSensorId()+" lightIntensity "+intensity+"\n");
-            	KafkaProducer.send(TOPIC, jo.toString());
+            	//System.out.println("LightSensor"+Thread.currentThread().getName()+" lamp id "+ls.getLightSensorId()+" lightIntensity "+intensity+"\n");
+            	KafkaProducer.send(LIGHT_SENSOR_TOPIC, jo.toString());
         	}
         	
         	try {	
-				Thread.sleep(10000);
+				Thread.sleep(LIGHTSENSOR_THREAD_SLEEPTIME);
 			}
 			catch(InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
-        	
 		}
 		if(stop){
 			Thread.currentThread().interrupt();

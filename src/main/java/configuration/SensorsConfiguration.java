@@ -13,6 +13,7 @@ import model.LightSensor;
 import model.StreetLamp;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import thread.LightSensorThread;
@@ -26,7 +27,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class SensorsConfiguration {
 
-	public final static int LAMPS_FOR_THREAD = 10;
+	@Value("${lamps.for.thread}")
+	public int LAMPS_FOR_THREAD;
+	@Value("${max.num.lamps}")
+	public int MAX_NUM_LAMPS;
+	@Value("${streetlamp.topic}")
+	private String STREETLAMP_TOPIC;
+	@Value("${light.sensor.topic}")
+	private String LIGHT_SENSOR_TOPIC;
+	@Value("${streelamp.thread.sleeptime}")
+	private long STREETLAMP_THREAD_SLEEPTIME;
+	@Value("${lightsensor.thread.sleeptime}")
+	private long LIGHTSENSOR_THREAD_SLEEPTIME;
 	
 	@Autowired
 	StreetLampRepository streetLampRepository;
@@ -51,7 +63,7 @@ public class SensorsConfiguration {
 	 		lightSensor.setTimestamp(0);
 	 		lightSensorRepository.save(lightSensor);
  		
-			if(sl.getLampId() == 10)//to test with less lamp
+			if(sl.getLampId() == MAX_NUM_LAMPS)//to test with less lamp
 				break;
 		}
 	}
@@ -79,9 +91,13 @@ public class SensorsConfiguration {
     			MappingThreadsToLamps.getInstance().put(streetLampList.get(i+j).getLampId(), lampThread);
      			lampThread.getListAdjustment().getMappingAdjustmentToLamps().put(streetLampList.get(i+j).getLampId(), 0.0);
 				lampThread.getStreetLampList().add(streetLampList.get(i+j));
+				lampThread.setTopic(this.STREETLAMP_TOPIC);
+				lampThread.setSleepTime(this.STREETLAMP_THREAD_SLEEPTIME);
 				
 				MappingThreadsToLightSensors.getInstance().put(sensorLightList.get(i+j).getLightSensorId(), lightThread);
 				lightThread.getLightSensorList().add(sensorLightList.get(i+j));
+				lightThread.setTopic(this.LIGHT_SENSOR_TOPIC);
+				lightThread.setSleepTime(this.LIGHTSENSOR_THREAD_SLEEPTIME);
 			}
 			lampThread.start();
 			lightThread.start();
