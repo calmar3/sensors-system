@@ -36,8 +36,6 @@ public class CRUDServiceImpl implements CRUDService{
 	@Override
 	public ResponseEntity<JSONObject> insertStreetLamp(DTO request) {
 
-		System.out.println("\n\n\n\n\n"+LAMPS_FOR_THREAD+"\n\n\n\n\n");
-		
 		//parse and save streetLamp
 		long id = request.getLampId();
 		double lightIntensity = request.getLightIntensity();

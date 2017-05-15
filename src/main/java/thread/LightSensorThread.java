@@ -91,7 +91,8 @@ public class LightSensorThread extends Thread {
 			}	
 			
 	        //publish tuple on kafka topic
-        	for(LightSensor ls: lightSensorList){
+			List<LightSensor> tmpLightSensorList = this.lightSensorList;
+        	for(LightSensor ls: tmpLightSensorList){
         		Date date = new Date();
             	ls.setTimestamp(date.getTime());//add timestamp UTC 1/1/1970 epoch
             	

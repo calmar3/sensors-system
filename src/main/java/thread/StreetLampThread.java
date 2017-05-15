@@ -114,7 +114,8 @@ public class StreetLampThread extends Thread {
 				e1.printStackTrace();
 			}
 			
-        	for(StreetLamp sl: streetLampList){
+			List<StreetLamp> tmpStreetLampList = this.streetLampList;
+        	for(StreetLamp sl: tmpStreetLampList){
         		sl.setStateOn(tmpStateOn);
         		if(sl.isStateOn() && !stop){
         			if(sl.getLampId() == 10 || sl.getLampId() == 40){//Continuously generate 2 warning
@@ -125,6 +126,9 @@ public class StreetLampThread extends Thread {
 	            	sl.setTimestamp(date.getTime());//add timestamp UTC 1/1/1970 epoch
 	            	sl.setResidualLifeTime(sl.getTimestamp() - sl.getLastSubstitutionDate());//add timestamp UTC 1/1/1970 epoch
 	        		
+	            	if(this.listAdjustment.getMappingAdjustmentToLamps().get(sl.getLampId()) == null)
+	            			continue;
+	            	
 	            	BigDecimal bg = new BigDecimal(tmpLightIntensity+this.listAdjustment.getMappingAdjustmentToLamps().get(sl.getLampId())); 
 	        		bg = bg.setScale(2, BigDecimal.ROUND_HALF_UP);
 	        		double intensity = bg.doubleValue();
